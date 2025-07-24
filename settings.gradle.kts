@@ -21,4 +21,9 @@ dependencyResolutionManagement {
 
 rootProject.name = "MetroStationAlert2"
 include(":app")
- 
+include(":data")
+include(":domain")
+include(":feature-search")
+include(":feature-bookmark")
+include(":feature-settings")
+include(":common-ui")
