@@ -12,11 +12,12 @@ appcompat = "1.7.1"
 material = "1.12.0"
 hilt = "2.57"
 ksp = "2.0.21-1.0.28"
-retrofit = "3.0.0"
-okhttp = "5.1.0"
+retrofit = "2.11.0"
+okhttp = "4.12.0"
 moshi = "1.15.2"
 viewmodelCompose = "2.9.2"
 hiltNavigationCompose = "1.2.0"
+navigationCompose = "2.9.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -51,6 +52,9 @@ moshi-kotlin = { group = "com.squareup.moshi", name = "moshi-kotlin", version.re
 # Compose ViewModel
 androidx-lifecycle-viewmodel-compose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "viewmodelCompose" }
 androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
+
+# Navigation Compose
+androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
