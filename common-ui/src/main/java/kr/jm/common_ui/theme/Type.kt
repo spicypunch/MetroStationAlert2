@@ -1,4 +1,4 @@
-package com.jm.metrostationalert.ui.theme
+package kr.jm.common_ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
