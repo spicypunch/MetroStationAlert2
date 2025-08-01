@@ -22,10 +22,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.jm.metrostationalert.navigation.BottomNavItem
-import kr.jm.feature_search.SearchScreen
+import dagger.hilt.android.AndroidEntryPoint
+import kr.jm.feature_bookmark.bookmarkScreen
 import kr.jm.feature_search.searchRoute
 import kr.jm.feature_search.searchScreen
-import dagger.hilt.android.AndroidEntryPoint
+import kr.jm.feature_settings.settingsScreen
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -68,6 +69,8 @@ fun App() {
                 startDestination = searchRoute
             ) {
                 searchScreen()
+                bookmarkScreen()
+                settingsScreen()
             }
         }
     }
