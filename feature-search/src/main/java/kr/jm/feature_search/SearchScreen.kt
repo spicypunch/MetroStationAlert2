@@ -13,6 +13,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -51,8 +55,8 @@ fun SearchScreen(
             verticalAlignment = Alignment.CenterVertically
         ) {
             TextField(
-                value = "",
-                onValueChange = {},
+                value = searchScreenState.searchQuery,
+                onValueChange = searchViewModel::onSearchQueryChanged,
                 modifier = Modifier
                     .background(
                         color = Color.White,
@@ -113,7 +117,62 @@ fun SearchScreen(
             )
         }
 
-        LazyColumn { }
+        LazyColumn(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            items(searchScreenState.stations.size) { index ->
+                val station = searchScreenState.stations[index]
+                StationItem(station = station)
+            }
+        }
+    }
+}
+
+@Composable
+private fun StationItem(
+    station: kr.jm.domain.model.SubwayStation,
+    modifier: Modifier = Modifier
+) {
+    Card(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 8.dp, vertical = 4.dp)
+            .border(1.dp, Color.Black, shape = RoundedCornerShape(12.dp)),
+        colors = CardDefaults.cardColors(
+            containerColor = Color.White
+        ),
+        shape = RoundedCornerShape(12.dp)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column(
+                modifier = Modifier.weight(1f)
+            ) {
+                Text(
+                    text = station.name,
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    text = station.line,
+                    color = Color.Gray
+                )
+            }
+            
+            Icon(
+                imageVector = if (station.isBookmarked) {
+                    Icons.Filled.Star
+                } else {
+                    Icons.Outlined.Star
+                },
+                contentDescription = if (station.isBookmarked) "Bookmarked" else "Not bookmarked",
+                tint = if (station.isBookmarked) Color(0xFFFFD700) else Color.Gray
+            )
+        }
     }
 }
 
