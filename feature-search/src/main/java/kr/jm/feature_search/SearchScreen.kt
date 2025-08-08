@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.Star
@@ -21,8 +20,11 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -37,6 +39,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import kr.jm.common_ui.theme.bgColor
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchScreen(
     searchViewModel: SearchViewModel = hiltViewModel()
@@ -97,7 +100,7 @@ fun SearchScreen(
                 .fillMaxWidth()
                 .border(1.dp, Color.Black, shape = RoundedCornerShape(12.dp)),
             colors = CardDefaults.cardColors(
-                 containerColor = Color.White
+                containerColor = Color.White
             ),
             shape = RoundedCornerShape(12.dp),
         ) {
@@ -107,14 +110,62 @@ fun SearchScreen(
             }
         }
 
-        DropdownMenu(
-            expanded = searchScreenState.dropDownExpanded,
-            onDismissRequest = {}
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            DropdownMenuItem(
-                text = { Text("노선 선택")},
-                onClick = {}
-            )
+            ExposedDropdownMenuBox(
+                expanded = searchScreenState.dropDownExpanded,
+                onExpandedChange = { searchViewModel.onDropdownToggle() },
+                modifier = Modifier.weight(0.4f)
+            ) {
+                OutlinedTextField(
+                    value = searchScreenState.selectedLineName,
+                    onValueChange = {},
+                    readOnly = true,
+                    label = { Text("노선 필터") },
+                    trailingIcon = {
+                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = searchScreenState.dropDownExpanded)
+                    },
+                    modifier = Modifier
+                        .menuAnchor()
+                        .weight(0.4f)
+                        .height(55.dp),
+                    shape = RoundedCornerShape(12.dp),
+                    colors = TextFieldDefaults.colors(
+                        focusedTextColor = Color.Black,
+                        unfocusedTextColor = Color.Black,
+                        cursorColor = Color.Black,
+                        focusedContainerColor = Color.White,
+                        unfocusedContainerColor = Color.White,
+                        focusedIndicatorColor = Color.Black,
+                        unfocusedIndicatorColor = Color.Black
+                    )
+                )
+
+                ExposedDropdownMenu(
+                    expanded = searchScreenState.dropDownExpanded,
+                    onDismissRequest = { searchViewModel.onDropdownToggle() },
+                    modifier = Modifier
+                        .exposedDropdownSize()
+                        .border(
+                            1.dp, Color.Black, RoundedCornerShape(12.dp)
+                        ),
+                    shape = RoundedCornerShape(12.dp),
+                    containerColor = Color.White
+                ) {
+                    //                options.forEach { option ->
+                    //                    DropdownMenuItem(
+                    //                        text = { Text(option, color = Color.Black) },
+                    //                        onClick = {
+                    //                            onSelect(option)
+                    //                            onToggleExpand()
+                    //                        }
+                    //                    )
+                    //                }
+                }
+            }
+            Spacer(modifier = Modifier.weight(0.6f))
         }
 
         LazyColumn(
@@ -162,7 +213,7 @@ private fun StationItem(
                     color = Color.Gray
                 )
             }
-            
+
             Icon(
                 imageVector = if (station.isBookmarked) {
                     Icons.Filled.Star
