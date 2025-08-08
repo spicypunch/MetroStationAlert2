@@ -8,6 +8,6 @@ class SearchSubwayStationsUseCase(
 ) {
     suspend operator fun invoke(query: String): List<SubwayStation> {
         return repository.searchStations(query)
-            .sortedBy { it.name } // 이름순 정렬
+            .sortedBy { it.name }
     }
 }
