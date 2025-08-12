@@ -10,10 +10,10 @@ import javax.inject.Singleton
 class SubwayStationRepositoryImpl @Inject constructor(
     private val localDataSource: LocalSubwayStationDataSource
 ) : SubwayStationRepository {
-    
+
     // 나중에 북마크 상태를 관리할 저장소 (SharedPreferences 등)
     private val bookmarkedStations = mutableSetOf<String>()
-    
+
     override suspend fun getAllStations(): List<SubwayStation> {
         return localDataSource.getSubwayStations().map { dto ->
             SubwayStation(
@@ -26,27 +26,26 @@ class SubwayStationRepositoryImpl @Inject constructor(
             )
         }
     }
-    
+
     override suspend fun searchStations(query: String): List<SubwayStation> {
         val allStations = getAllStations()
         return if (query.isBlank()) {
             allStations
         } else {
             allStations.filter { station ->
-                station.name.contains(query, ignoreCase = true) ||
-                station.line.contains(query, ignoreCase = true)
+                station.name.contains(query, ignoreCase = true)
             }
         }
     }
-    
+
     override suspend fun getBookmarkedStations(): List<SubwayStation> {
         return getAllStations().filter { it.isBookmarked }
     }
-    
+
     override suspend fun bookmarkStation(stationId: String) {
         bookmarkedStations.add(stationId)
     }
-    
+
     override suspend fun unbookmarkStation(stationId: String) {
         bookmarkedStations.remove(stationId)
     }

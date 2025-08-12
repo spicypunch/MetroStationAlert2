@@ -15,22 +15,23 @@ class SearchViewModel @Inject constructor(
     private val getSubwayStationsUseCase: GetSubwayStationsUseCase,
     private val searchSubwayStationsUseCase: SearchSubwayStationsUseCase
 ) : ViewModel() {
-    
+
     private val _searchScreenState = mutableStateOf(SearchScreenState())
     val searchScreenState: State<SearchScreenState> = _searchScreenState
-    
+
     init {
         loadAllStations()
+        filterStationName("전체")
     }
-    
+
     private fun loadAllStations() {
         viewModelScope.launch {
             _searchScreenState.value = _searchScreenState.value.copy(isLoading = true)
-            
+
             try {
                 val stations = getSubwayStationsUseCase()
                 _searchScreenState.value = _searchScreenState.value.copy(
-                    stations = stations,
+                    allStations = stations,
                     isLoading = false,
                     errorMessage = null
                 )
@@ -42,20 +43,20 @@ class SearchViewModel @Inject constructor(
             }
         }
     }
-    
+
     fun onSearchQueryChanged(query: String) {
         _searchScreenState.value = _searchScreenState.value.copy(searchQuery = query)
-        searchStations(query)
     }
-    
-    private fun searchStations(query: String) {
+
+    fun searchStations() {
         viewModelScope.launch {
             _searchScreenState.value = _searchScreenState.value.copy(isLoading = true)
-            
+
             try {
-                val stations = searchSubwayStationsUseCase(query)
+                val searchStationResult =
+                    searchSubwayStationsUseCase(_searchScreenState.value.searchQuery)
                 _searchScreenState.value = _searchScreenState.value.copy(
-                    stations = stations,
+                    filteredStations = searchStationResult,
                     isLoading = false,
                     errorMessage = null
                 )
@@ -67,10 +68,30 @@ class SearchViewModel @Inject constructor(
             }
         }
     }
-    
+
     fun onDropdownToggle() {
         _searchScreenState.value = _searchScreenState.value.copy(
             dropDownExpanded = !_searchScreenState.value.dropDownExpanded
+        )
+    }
+
+    fun onSelectedLineChanged(lineName: String) {
+        _searchScreenState.value = _searchScreenState.value.copy(
+            selectedLineName = lineName
+        )
+    }
+
+    fun filterStationName(lineName: String) {
+        val filteredStations = _searchScreenState.value.allStations.filter {
+            if (lineName == "전체") {
+                return@filter true
+            } else {
+                it.line == lineName
+//                it.line.contains(lineName, ignoreCase = true)
+            }
+        }
+        _searchScreenState.value = _searchScreenState.value.copy(
+            filteredStations = filteredStations
         )
     }
 }
