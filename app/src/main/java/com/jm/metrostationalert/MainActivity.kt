@@ -23,6 +23,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.jm.metrostationalert.navigation.BottomNavItem
 import dagger.hilt.android.AndroidEntryPoint
+import kr.jm.common_ui.theme.bgColor
 import kr.jm.feature_bookmark.bookmarkScreen
 import kr.jm.feature_search.searchRoute
 import kr.jm.feature_search.searchScreen
@@ -63,6 +64,7 @@ fun App() {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
+                .background(bgColor)
         ) {
             NavHost(
                 navController = navController,
@@ -84,7 +86,8 @@ fun MyBottomNavigation(
     modifier: Modifier = Modifier
 ) {
     NavigationBar(
-        modifier = modifier.background(Color.White)
+        modifier = modifier,
+        containerColor = bgColor
     ) {
         items.forEach { screen ->
             NavigationBarItem(
