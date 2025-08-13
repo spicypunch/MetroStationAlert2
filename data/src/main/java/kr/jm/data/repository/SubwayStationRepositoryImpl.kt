@@ -1,20 +1,21 @@
 package kr.jm.data.repository
 
+import kotlinx.coroutines.flow.first
 import kr.jm.data.datasource.LocalSubwayStationDataSource
 import kr.jm.domain.model.SubwayStation
 import kr.jm.domain.repository.SubwayStationRepository
+import kr.jm.domain.repository.UserPreferencesRepository
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class SubwayStationRepositoryImpl @Inject constructor(
-    private val localDataSource: LocalSubwayStationDataSource
+    private val localDataSource: LocalSubwayStationDataSource,
+    private val userPreferencesRepository: UserPreferencesRepository
 ) : SubwayStationRepository {
 
-    // 나중에 북마크 상태를 관리할 저장소 (SharedPreferences 등)
-    private val bookmarkedStations = mutableSetOf<String>()
-
     override suspend fun getAllStations(): List<SubwayStation> {
+        val bookmarkedStations = userPreferencesRepository.getBookmarks().first()
         return localDataSource.getSubwayStations().map { dto ->
             SubwayStation(
                 id = dto.notUse,
@@ -27,12 +28,11 @@ class SubwayStationRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun searchStations(query: String): List<SubwayStation> {
-        val allStations = getAllStations()
+    override suspend fun searchStations(query: String, filteredStations: List<SubwayStation>): List<SubwayStation> {
         return if (query.isBlank()) {
-            allStations
+            filteredStations
         } else {
-            allStations.filter { station ->
+            filteredStations.filter { station ->
                 station.name.contains(query, ignoreCase = true)
             }
         }
@@ -43,10 +43,10 @@ class SubwayStationRepositoryImpl @Inject constructor(
     }
 
     override suspend fun bookmarkStation(stationId: String) {
-        bookmarkedStations.add(stationId)
+        userPreferencesRepository.addBookmark(stationId)
     }
 
     override suspend fun unbookmarkStation(stationId: String) {
-        bookmarkedStations.remove(stationId)
+        userPreferencesRepository.removeBookmark(stationId)
     }
 }
