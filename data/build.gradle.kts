@@ -52,6 +52,9 @@ dependencies {
     implementation(libs.moshi)
     implementation(libs.moshi.kotlin)
     
+    // DataStore
+    implementation(libs.androidx.datastore.preferences)
+    
     // Hilt
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)

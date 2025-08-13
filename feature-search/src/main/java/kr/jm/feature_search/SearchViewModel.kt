@@ -54,7 +54,7 @@ class SearchViewModel @Inject constructor(
 
             try {
                 val searchStationResult =
-                    searchSubwayStationsUseCase(_searchScreenState.value.searchQuery)
+                    searchSubwayStationsUseCase(_searchScreenState.value.searchQuery, _searchScreenState.value.filteredStations)
                 _searchScreenState.value = _searchScreenState.value.copy(
                     filteredStations = searchStationResult,
                     isLoading = false,
