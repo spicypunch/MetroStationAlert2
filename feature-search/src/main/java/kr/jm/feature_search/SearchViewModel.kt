@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import kr.jm.domain.usecase.AddBookmarkUseCase
 import kr.jm.domain.usecase.GetSubwayStationsUseCase
 import kr.jm.domain.usecase.SearchSubwayStationsUseCase
 import javax.inject.Inject
@@ -13,7 +14,8 @@ import javax.inject.Inject
 @HiltViewModel
 class SearchViewModel @Inject constructor(
     private val getSubwayStationsUseCase: GetSubwayStationsUseCase,
-    private val searchSubwayStationsUseCase: SearchSubwayStationsUseCase
+    private val searchSubwayStationsUseCase: SearchSubwayStationsUseCase,
+    private val addBookmarkUseCase: AddBookmarkUseCase
 ) : ViewModel() {
 
     private val _searchScreenState = mutableStateOf(SearchScreenState())
@@ -93,5 +95,11 @@ class SearchViewModel @Inject constructor(
         _searchScreenState.value = _searchScreenState.value.copy(
             filteredStations = filteredStations
         )
+    }
+
+    fun addBookmark(stationName: String) {
+        viewModelScope.launch {
+            addBookmarkUseCase(stationName)
+        }
     }
 }

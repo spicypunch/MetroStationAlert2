@@ -3,8 +3,8 @@ package kr.jm.domain.repository
 import kotlinx.coroutines.flow.Flow
 
 interface UserPreferencesRepository {
-    suspend fun addBookmark(stationId: String)
-    suspend fun removeBookmark(stationId: String)
+    suspend fun addBookmark(stationName: String): Result<String>
+    suspend fun removeBookmark(stationName: String)
     fun getBookmarks(): Flow<Set<String>>
     suspend fun addRecentSearch(query: String)
     fun getRecentSearches(): Flow<List<String>>
