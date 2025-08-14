@@ -11,12 +11,12 @@ class UserPreferencesRepositoryImpl @Inject constructor(
     private val dataStore: UserPreferencesDataStore
 ) : UserPreferencesRepository {
 
-    override suspend fun addBookmark(stationId: String) {
-        dataStore.addBookmark(stationId)
+    override suspend fun addBookmark(stationName: String): Result<String> {
+        return dataStore.addBookmark(stationName)
     }
 
-    override suspend fun removeBookmark(stationId: String) {
-        dataStore.removeBookmark(stationId)
+    override suspend fun removeBookmark(stationName: String) {
+        dataStore.removeBookmark(stationName)
     }
 
     override fun getBookmarks(): Flow<Set<String>> {

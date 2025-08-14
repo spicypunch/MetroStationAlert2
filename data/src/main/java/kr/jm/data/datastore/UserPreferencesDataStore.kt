@@ -4,8 +4,8 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -23,17 +23,23 @@ class UserPreferencesDataStore @Inject constructor(
         val RECENT_SEARCHES = stringPreferencesKey("recent_searches")
     }
 
-    suspend fun addBookmark(stationId: String) {
-        context.dataStore.edit { preferences ->
-            val currentBookmarks = preferences[PreferencesKeys.BOOKMARKED_STATIONS] ?: emptySet()
-            preferences[PreferencesKeys.BOOKMARKED_STATIONS] = currentBookmarks + stationId
+    suspend fun addBookmark(stationName: String): Result<String> {
+        return try {
+            context.dataStore.edit { preferences ->
+                val currentBookmarks =
+                    preferences[PreferencesKeys.BOOKMARKED_STATIONS] ?: emptySet()
+                preferences[PreferencesKeys.BOOKMARKED_STATIONS] = currentBookmarks + stationName
+            }
+            Result.success(stationName)
+        } catch (e: Exception) {
+            Result.failure(e)
         }
     }
 
-    suspend fun removeBookmark(stationId: String) {
+    suspend fun removeBookmark(stationName: String) {
         context.dataStore.edit { preferences ->
             val currentBookmarks = preferences[PreferencesKeys.BOOKMARKED_STATIONS] ?: emptySet()
-            preferences[PreferencesKeys.BOOKMARKED_STATIONS] = currentBookmarks - stationId
+            preferences[PreferencesKeys.BOOKMARKED_STATIONS] = currentBookmarks - stationName
         }
     }
 
@@ -45,8 +51,10 @@ class UserPreferencesDataStore @Inject constructor(
 
     suspend fun addRecentSearch(query: String) {
         context.dataStore.edit { preferences ->
-            val currentSearches = preferences[PreferencesKeys.RECENT_SEARCHES]?.split(",")?.toMutableList() ?: mutableListOf()
-            
+            val currentSearches =
+                preferences[PreferencesKeys.RECENT_SEARCHES]?.split(",")?.toMutableList()
+                    ?: mutableListOf()
+
             // Remove if already exists
             currentSearches.remove(query)
             // Add to front
@@ -55,7 +63,7 @@ class UserPreferencesDataStore @Inject constructor(
             if (currentSearches.size > 10) {
                 currentSearches.removeAt(currentSearches.size - 1)
             }
-            
+
             preferences[PreferencesKeys.RECENT_SEARCHES] = currentSearches.joinToString(",")
         }
     }
