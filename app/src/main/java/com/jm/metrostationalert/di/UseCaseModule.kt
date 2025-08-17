@@ -8,6 +8,7 @@ import kr.jm.domain.repository.SubwayStationRepository
 import kr.jm.domain.repository.UserPreferencesRepository
 import kr.jm.domain.usecase.AddBookmarkUseCase
 import kr.jm.domain.usecase.GetSubwayStationsUseCase
+import kr.jm.domain.usecase.RemoveBookmarkUseCase
 import kr.jm.domain.usecase.SearchSubwayStationsUseCase
 import javax.inject.Singleton
 
@@ -38,4 +39,13 @@ object UseCaseModule {
     ): AddBookmarkUseCase {
         return AddBookmarkUseCase(repository)
     }
+
+    @Provides
+    @Singleton
+    fun provideRemoveBookmarkUseCase(
+        repository: UserPreferencesRepository
+    ): RemoveBookmarkUseCase {
+        return RemoveBookmarkUseCase(repository)
+    }
+
 }

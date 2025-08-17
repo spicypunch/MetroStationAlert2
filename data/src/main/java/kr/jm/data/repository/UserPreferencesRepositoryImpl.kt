@@ -15,8 +15,8 @@ class UserPreferencesRepositoryImpl @Inject constructor(
         return dataStore.addBookmark(stationName)
     }
 
-    override suspend fun removeBookmark(stationName: String) {
-        dataStore.removeBookmark(stationName)
+    override suspend fun removeBookmark(stationName: String): Result<String> {
+        return dataStore.removeBookmark(stationName)
     }
 
     override fun getBookmarks(): Flow<Set<String>> {

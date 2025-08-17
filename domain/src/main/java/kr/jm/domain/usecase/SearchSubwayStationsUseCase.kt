@@ -11,6 +11,6 @@ class SearchSubwayStationsUseCase(
         filteredStations: List<SubwayStation>
     ): List<SubwayStation> {
         return repository.searchStations(query, filteredStations)
-            .sortedBy { it.line }
+            .sortedBy { it.lineName }
     }
 }

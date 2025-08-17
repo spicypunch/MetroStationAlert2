@@ -5,10 +5,10 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class SubwayStation(
-    val id: String,
-    val name: String,
-    val line: String,
+    val notUse: String,
+    val stationName: String,
+    val lineName: String,
     val latitude: Double,
     val longitude: Double,
-    val isBookmarked: Boolean = false
+    val isBookmark: Boolean = false
 ) : Parcelable

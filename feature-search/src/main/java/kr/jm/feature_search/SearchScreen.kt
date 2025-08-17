@@ -2,6 +2,7 @@ package kr.jm.feature_search
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,7 +17,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -43,7 +44,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import kr.jm.common_ui.theme.bgColor
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -86,7 +86,17 @@ fun SearchScreen(
         ) {
             items(searchScreenState.filteredStations.size) { index ->
                 val station = searchScreenState.filteredStations[index]
-                StationItem(station = station)
+                StationItem(
+                    station = station,
+                    onClickNotificationIcon = {},
+                    onClickBookmarkIcon = { stationName ->
+                        if (station.isBookmark) {
+                            searchViewModel.removeBookmark(stationName)
+                        } else {
+                            searchViewModel.addBookmark(stationName)
+                        }
+                    }
+                )
             }
         }
     }
@@ -235,10 +245,11 @@ private fun DropdownMenuSection(
 @Composable
 private fun StationItem(
     station: kr.jm.domain.model.SubwayStation,
-    modifier: Modifier = Modifier
+    onClickNotificationIcon: (String) -> Unit,
+    onClickBookmarkIcon: (String) -> Unit
 ) {
     Card(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 8.dp, vertical = 4.dp)
             .border(1.dp, Color.Black, shape = RoundedCornerShape(12.dp)),
@@ -258,23 +269,28 @@ private fun StationItem(
                 modifier = Modifier.weight(1f)
             ) {
                 Text(
-                    text = station.name,
+                    text = station.stationName,
                     fontWeight = FontWeight.Bold
                 )
                 Text(
-                    text = station.line,
+                    text = station.lineName,
                     color = Color.Gray
                 )
             }
+            Icon(
+                imageVector = Icons.Outlined.Notifications,
+                contentDescription = "Notifications",
+                tint = Color.Gray,
+                modifier = Modifier.clickable { onClickNotificationIcon(station.stationName) }
+            )
+
+            Spacer(modifier = Modifier.width(4.dp))
 
             Icon(
-                imageVector = if (station.isBookmarked) {
-                    Icons.Filled.Star
-                } else {
-                    Icons.Outlined.Star
-                },
-                contentDescription = if (station.isBookmarked) "Bookmarked" else "Not bookmarked",
-                tint = if (station.isBookmarked) Color(0xFFFFD700) else Color.Gray
+                imageVector = Icons.Outlined.Star,
+                contentDescription = if (station.isBookmark) "Bookmarked" else "Not bookmarked",
+                tint = if (station.isBookmark) Color(0xFFFFD700) else Color.Gray,
+                modifier = Modifier.clickable { onClickBookmarkIcon(station.stationName) }
             )
         }
     }

@@ -36,10 +36,16 @@ class UserPreferencesDataStore @Inject constructor(
         }
     }
 
-    suspend fun removeBookmark(stationName: String) {
-        context.dataStore.edit { preferences ->
-            val currentBookmarks = preferences[PreferencesKeys.BOOKMARKED_STATIONS] ?: emptySet()
-            preferences[PreferencesKeys.BOOKMARKED_STATIONS] = currentBookmarks - stationName
+    suspend fun removeBookmark(stationName: String): Result<String> {
+        return try {
+            context.dataStore.edit { preferences ->
+                val currentBookmarks =
+                    preferences[PreferencesKeys.BOOKMARKED_STATIONS] ?: emptySet()
+                preferences[PreferencesKeys.BOOKMARKED_STATIONS] = currentBookmarks - stationName
+            }
+            Result.success(stationName)
+        } catch (e: Exception) {
+            Result.failure(e)
         }
     }
 
