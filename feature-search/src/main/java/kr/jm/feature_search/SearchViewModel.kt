@@ -6,14 +6,18 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import kr.jm.domain.usecase.AddBookmarkUseCase
 import kr.jm.domain.usecase.GetSubwayStationsUseCase
+import kr.jm.domain.usecase.RemoveBookmarkUseCase
 import kr.jm.domain.usecase.SearchSubwayStationsUseCase
 import javax.inject.Inject
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
     private val getSubwayStationsUseCase: GetSubwayStationsUseCase,
-    private val searchSubwayStationsUseCase: SearchSubwayStationsUseCase
+    private val searchSubwayStationsUseCase: SearchSubwayStationsUseCase,
+    private val addBookmarkUseCase: AddBookmarkUseCase,
+    private val removeBookmarkUseCase: RemoveBookmarkUseCase
 ) : ViewModel() {
 
     private val _searchScreenState = mutableStateOf(SearchScreenState())
@@ -54,7 +58,10 @@ class SearchViewModel @Inject constructor(
 
             try {
                 val searchStationResult =
-                    searchSubwayStationsUseCase(_searchScreenState.value.searchQuery, _searchScreenState.value.filteredStations)
+                    searchSubwayStationsUseCase(
+                        _searchScreenState.value.searchQuery,
+                        _searchScreenState.value.filteredStations
+                    )
                 _searchScreenState.value = _searchScreenState.value.copy(
                     filteredStations = searchStationResult,
                     isLoading = false,
@@ -86,12 +93,24 @@ class SearchViewModel @Inject constructor(
             if (lineName == "전체") {
                 return@filter true
             } else {
-                it.line == lineName
+                it.lineName == lineName
 //                it.line.contains(lineName, ignoreCase = true)
             }
         }
         _searchScreenState.value = _searchScreenState.value.copy(
             filteredStations = filteredStations
         )
+    }
+
+    fun addBookmark(stationName: String) {
+        viewModelScope.launch {
+            addBookmarkUseCase(stationName)
+        }
+    }
+
+    fun removeBookmark(stationName: String) {
+        viewModelScope.launch {
+            removeBookmarkUseCase(stationName)
+        }
     }
 }

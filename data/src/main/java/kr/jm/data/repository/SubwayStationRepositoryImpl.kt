@@ -18,12 +18,12 @@ class SubwayStationRepositoryImpl @Inject constructor(
         val bookmarkedStations = userPreferencesRepository.getBookmarks().first()
         return localDataSource.getSubwayStations().map { dto ->
             SubwayStation(
-                id = dto.notUse,
-                name = dto.stationName,
-                line = dto.lineName,
+                notUse = dto.notUse,
+                stationName = dto.stationName,
+                lineName = dto.lineName,
                 latitude = dto.latitude,
                 longitude = dto.longitude,
-                isBookmarked = bookmarkedStations.contains(dto.notUse)
+                isBookmark = bookmarkedStations.contains(dto.stationName)
             )
         }
     }
@@ -33,20 +33,8 @@ class SubwayStationRepositoryImpl @Inject constructor(
             filteredStations
         } else {
             filteredStations.filter { station ->
-                station.name.contains(query, ignoreCase = true)
+                station.stationName.contains(query, ignoreCase = true)
             }
         }
-    }
-
-    override suspend fun getBookmarkedStations(): List<SubwayStation> {
-        return getAllStations().filter { it.isBookmarked }
-    }
-
-    override suspend fun bookmarkStation(stationId: String) {
-        userPreferencesRepository.addBookmark(stationId)
-    }
-
-    override suspend fun unbookmarkStation(stationId: String) {
-        userPreferencesRepository.removeBookmark(stationId)
     }
 }
