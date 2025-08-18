@@ -1,6 +1,7 @@
 package kr.jm.data.repository
 
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kr.jm.data.datasource.LocalSubwayStationDataSource
 import kr.jm.domain.model.SubwayStation
 import kr.jm.domain.repository.SubwayStationRepository
@@ -14,17 +15,19 @@ class SubwayStationRepositoryImpl @Inject constructor(
     private val userPreferencesRepository: UserPreferencesRepository
 ) : SubwayStationRepository {
 
-    override suspend fun getAllStations(): List<SubwayStation> {
-        val bookmarkedStations = userPreferencesRepository.getBookmarks().first()
-        return localDataSource.getSubwayStations().map { dto ->
-            SubwayStation(
-                notUse = dto.notUse,
-                stationName = dto.stationName,
-                lineName = dto.lineName,
-                latitude = dto.latitude,
-                longitude = dto.longitude,
-                isBookmark = bookmarkedStations.contains(dto.stationName)
-            )
+    override fun getAllStations(): Flow<List<SubwayStation>> {
+        val stations = localDataSource.getSubwayStations()
+        return userPreferencesRepository.getBookmarks().map { bookmarkedStations ->
+            stations.map { dto ->
+                SubwayStation(
+                    notUse = dto.notUse,
+                    stationName = dto.stationName,
+                    lineName = dto.lineName,
+                    latitude = dto.latitude,
+                    longitude = dto.longitude,
+                    isBookmark = bookmarkedStations.contains(dto.stationName)
+                )
+            }
         }
     }
 

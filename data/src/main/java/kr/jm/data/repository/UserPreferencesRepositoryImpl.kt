@@ -23,6 +23,14 @@ class UserPreferencesRepositoryImpl @Inject constructor(
         return dataStore.getBookmarks()
     }
 
+    override suspend fun addAlertStation(stationName: String): Result<String> {
+        return dataStore.addAlertStation(stationName)
+    }
+
+    override fun getAddedAlertStation(): Flow<String?> {
+        return dataStore.getAddedAlertStation()
+    }
+
     override suspend fun addRecentSearch(query: String) {
         dataStore.addRecentSearch(query)
     }
