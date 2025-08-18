@@ -8,6 +8,7 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -50,9 +51,11 @@ class UserPreferencesDataStore @Inject constructor(
     }
 
     fun getBookmarks(): Flow<Set<String>> {
-        return context.dataStore.data.map { preferences ->
-            preferences[PreferencesKeys.BOOKMARKED_STATIONS] ?: emptySet()
-        }
+        return context.dataStore.data
+            .map { preferences ->
+                preferences[PreferencesKeys.BOOKMARKED_STATIONS] ?: emptySet()
+            }
+            .distinctUntilChanged()
     }
 
     suspend fun addRecentSearch(query: String) {
