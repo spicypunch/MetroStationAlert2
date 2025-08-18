@@ -69,7 +69,9 @@ fun SearchScreen(
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        RegisterStationSection()
+        if (searchScreenState.addedAlertStation.isNotBlank()) {
+            RegisterStationSection(searchScreenState.addedAlertStation)
+        }
 
         Spacer(modifier = Modifier.height(8.dp))
 
@@ -89,7 +91,9 @@ fun SearchScreen(
                 val station = searchScreenState.filteredStations[index]
                 StationItem(
                     station = station,
-                    onClickNotificationIcon = {},
+                    onClickNotificationIcon = { stationName ->
+                        searchViewModel.addAlertStation(stationName)
+                    },
                     onClickBookmarkIcon = { stationName ->
                         if (station.isBookmark) {
                             searchViewModel.removeBookmark(stationName)
@@ -153,7 +157,9 @@ private fun SearchStationSection(
 }
 
 @Composable
-private fun RegisterStationSection() {
+private fun RegisterStationSection(
+    stationName: String
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -165,7 +171,7 @@ private fun RegisterStationSection() {
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text("등록된 역", fontWeight = FontWeight.Bold)
-            Text("선릉역")
+            Text(stationName)
         }
     }
 }

@@ -4,6 +4,7 @@ import kr.jm.domain.model.SubwayStation
 
 data class SearchScreenState(
     val allStations: List<SubwayStation> = emptyList(),
+    val addedAlertStation: String = "",
     val filteredStations: List<SubwayStation> = emptyList(),
     val selectedLineName: String = "전체",
     val subwayLineList: List<String> = listOf(

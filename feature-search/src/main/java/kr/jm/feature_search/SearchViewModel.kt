@@ -9,10 +9,13 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kr.jm.domain.model.SubwayStation
+import kr.jm.domain.usecase.AddAlertStationUseCase
 import kr.jm.domain.usecase.AddBookmarkUseCase
+import kr.jm.domain.usecase.GetAddedAlertStationUseCase
 import kr.jm.domain.usecase.GetSubwayStationsUseCase
 import kr.jm.domain.usecase.RemoveBookmarkUseCase
 import kr.jm.domain.usecase.SearchSubwayStationsUseCase
@@ -23,7 +26,9 @@ class SearchViewModel @Inject constructor(
     private val getSubwayStationsUseCase: GetSubwayStationsUseCase,
     private val searchSubwayStationsUseCase: SearchSubwayStationsUseCase,
     private val addBookmarkUseCase: AddBookmarkUseCase,
-    private val removeBookmarkUseCase: RemoveBookmarkUseCase
+    private val removeBookmarkUseCase: RemoveBookmarkUseCase,
+    private val addedAlertStationUseCase: AddAlertStationUseCase,
+    private val getAddedAlertStationUseCase: GetAddedAlertStationUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(SearchScreenState())
@@ -46,6 +51,7 @@ class SearchViewModel @Inject constructor(
 
     init {
         loadAllStations()
+        loadAddedAlertStation()
     }
 
     private fun loadAllStations() {
@@ -55,12 +61,18 @@ class SearchViewModel @Inject constructor(
             stationsState.collectLatest { stations ->
                 val currentState = _uiState.value
                 val currentLine = currentState.selectedLineName.ifBlank { "전체" }
-                val byLine = if (currentLine == "전체") stations else stations.filter { it.lineName == currentLine }
+                val byLine =
+                    if (currentLine == "전체") stations else stations.filter { it.lineName == currentLine }
 
                 val finalList = if (currentState.searchQuery.isBlank()) {
                     byLine
                 } else {
-                    byLine.filter { it.stationName.contains(currentState.searchQuery, ignoreCase = true) }
+                    byLine.filter {
+                        it.stationName.contains(
+                            currentState.searchQuery,
+                            ignoreCase = true
+                        )
+                    }
                 }
 
                 _uiState.value = currentState.copy(
@@ -70,6 +82,18 @@ class SearchViewModel @Inject constructor(
                     errorMessage = null
                 )
             }
+        }
+    }
+
+    private fun loadAddedAlertStation() {
+        viewModelScope.launch {
+            getAddedAlertStationUseCase()
+                .filterNotNull()
+                .collectLatest {
+                    _uiState.value = _uiState.value.copy(
+                        addedAlertStation = it
+                    )
+                }
         }
     }
 
@@ -98,6 +122,12 @@ class SearchViewModel @Inject constructor(
                     errorMessage = e.message ?: "Search failed"
                 )
             }
+        }
+    }
+
+    fun addAlertStation(stationName: String) {
+        viewModelScope.launch {
+            addedAlertStationUseCase(stationName)
         }
     }
 

@@ -22,6 +22,7 @@ class UserPreferencesDataStore @Inject constructor(
     private object PreferencesKeys {
         val BOOKMARKED_STATIONS = stringSetPreferencesKey("bookmarked_stations")
         val RECENT_SEARCHES = stringPreferencesKey("recent_searches")
+        val ALERT_STATION = stringPreferencesKey("alert_station")
     }
 
     suspend fun addBookmark(stationName: String): Result<String> {
@@ -54,6 +55,25 @@ class UserPreferencesDataStore @Inject constructor(
         return context.dataStore.data
             .map { preferences ->
                 preferences[PreferencesKeys.BOOKMARKED_STATIONS] ?: emptySet()
+            }
+            .distinctUntilChanged()
+    }
+
+    suspend fun addAlertStation(stationName: String): Result<String> {
+        return try {
+            context.dataStore.edit { preferences ->
+                preferences[PreferencesKeys.ALERT_STATION] = stationName
+            }
+            Result.success(stationName)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    fun getAddedAlertStation(): Flow<String?> {
+        return context.dataStore.data
+            .map { preferences ->
+                preferences[PreferencesKeys.ALERT_STATION]
             }
             .distinctUntilChanged()
     }
