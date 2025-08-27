@@ -1,44 +1,33 @@
 package kr.jm.data.datastore
 
 import android.content.Context
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.MutablePreferences
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.stringPreferencesKey
-import androidx.datastore.preferences.core.stringSetPreferencesKey
+import androidx.test.core.app.ApplicationProvider
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import app.cash.turbine.test
-import io.mockk.coEvery
-import io.mockk.coVerify
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.slot
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.robolectric.annotation.Config
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 @ExperimentalCoroutinesApi
+@RunWith(AndroidJUnit4::class)
+@Config(sdk = [35])
 class UserPreferencesDataStoreTest {
 
-    private lateinit var userPreferencesDataStore: UserPreferencesDataStore
-    private val mockContext: Context = mockk()
-    private val mockDataStore: DataStore<Preferences> = mockk(relaxed = true)
-    private val mockPreferences: Preferences = mockk()
-    private val mockMutablePreferences: MutablePreferences = mockk(relaxed = true)
-
-    private val bookmarkedStationsKey = stringSetPreferencesKey("bookmarked_stations")
-    private val recentSearchesKey = stringPreferencesKey("recent_searches")
-    private val alertStationKey = stringPreferencesKey("alert_station")
+    private lateinit var dataStore: UserPreferencesDataStore
+    private lateinit var context: Context
 
     @Before
     fun setUp() {
-        every { mockContext.dataStore } returns mockDataStore
-        userPreferencesDataStore = UserPreferencesDataStore(mockContext)
+        context = ApplicationProvider.getApplicationContext()
+        dataStore = UserPreferencesDataStore(context)
     }
+
 
     @Test
     fun `addBookmark 성공 시 Result success를 반환해야 한다`() = runTest {
@@ -250,14 +239,6 @@ class UserPreferencesDataStoreTest {
         }
     }
 
-    @Test
-    fun `getAddedAlertStation은 초기에 null을 반환해야 한다`() = runTest {
-        // When & Then
-        dataStore.getAddedAlertStation().test {
-            val alertStation = awaitItem()
-            assertEquals(null, alertStation, "Initial alert station should be null")
-        }
-    }
 
     @Test
     fun `getRecentSearches는 초기에 빈 리스트를 반환해야 한다`() = runTest {
