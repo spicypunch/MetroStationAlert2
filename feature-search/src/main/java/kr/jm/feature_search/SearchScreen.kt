@@ -45,6 +45,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kr.jm.common_ui.component.CommonStationCard
+import kr.jm.domain.model.SubwayStation
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -59,7 +61,7 @@ fun SearchScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
-        Text("하차 알리미🔔")
+        Text("하차 알리미🔔", fontSize = 20.sp, fontWeight = FontWeight.Bold)
 
         SearchStationSection(
             searchScreenState,
@@ -70,7 +72,7 @@ fun SearchScreen(
         Spacer(modifier = Modifier.height(8.dp))
 
         if (searchScreenState.addedAlertStation.isNotBlank()) {
-            RegisterStationSection(searchScreenState.addedAlertStation)
+            CommonStationCard(primaryText = "하차 알림", secondText = searchScreenState.addedAlertStation)
         }
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -156,26 +158,6 @@ private fun SearchStationSection(
     }
 }
 
-@Composable
-private fun RegisterStationSection(
-    stationName: String
-) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .border(1.dp, Color.Black, shape = RoundedCornerShape(12.dp)),
-        colors = CardDefaults.cardColors(
-            containerColor = Color.White
-        ),
-        shape = RoundedCornerShape(12.dp),
-    ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Text("등록된 역", fontWeight = FontWeight.Bold)
-            Text(stationName)
-        }
-    }
-}
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun DropdownMenuSection(
@@ -251,56 +233,18 @@ private fun DropdownMenuSection(
 
 @Composable
 private fun StationItem(
-    station: kr.jm.domain.model.SubwayStation,
+    station: SubwayStation,
     onClickNotificationIcon: (String) -> Unit,
     onClickBookmarkIcon: (String) -> Unit
 ) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 8.dp, vertical = 4.dp)
-            .border(1.dp, Color.Black, shape = RoundedCornerShape(12.dp)),
-        colors = CardDefaults.cardColors(
-            containerColor = Color.White
-        ),
-        shape = RoundedCornerShape(12.dp)
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Column(
-                modifier = Modifier.weight(1f)
-            ) {
-                Text(
-                    text = station.stationName,
-                    fontWeight = FontWeight.Bold
-                )
-                Text(
-                    text = station.lineName,
-                    color = Color.Gray
-                )
-            }
-            Icon(
-                imageVector = Icons.Outlined.Notifications,
-                contentDescription = "Notifications",
-                tint = Color.Gray,
-                modifier = Modifier.clickable { onClickNotificationIcon(station.stationName) }
-            )
-
-            Spacer(modifier = Modifier.width(4.dp))
-
-            Icon(
-                imageVector = Icons.Outlined.Star,
-                contentDescription = if (station.isBookmark) "Bookmarked" else "Not bookmarked",
-                tint = if (station.isBookmark) Color(0xFFFFD700) else Color.Gray,
-                modifier = Modifier.clickable { onClickBookmarkIcon(station.stationName) }
-            )
-        }
-    }
+    CommonStationCard(
+        primaryText = station.stationName,
+        secondText = station.lineName,
+        isBookmark = station.isBookmark,
+        bookMarkIconVisible = true,
+        onClickNotificationIcon = onClickNotificationIcon,
+        onClickBookmarkIcon = onClickBookmarkIcon
+    )
 }
 
 @Preview(showSystemUi = true)
