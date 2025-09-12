@@ -4,11 +4,13 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kr.jm.domain.repository.OpenApiRepository
 import kr.jm.domain.repository.SubwayStationRepository
 import kr.jm.domain.repository.UserPreferencesRepository
 import kr.jm.domain.usecase.AddAlertStationUseCase
 import kr.jm.domain.usecase.AddBookmarkUseCase
 import kr.jm.domain.usecase.GetAddedAlertStationUseCase
+import kr.jm.domain.usecase.GetSubwayArrivalTimeUseCase
 import kr.jm.domain.usecase.GetSubwayStationsUseCase
 import kr.jm.domain.usecase.RemoveBookmarkUseCase
 import kr.jm.domain.usecase.SearchSubwayStationsUseCase
@@ -64,6 +66,14 @@ object UseCaseModule {
         repository: UserPreferencesRepository
     ): GetAddedAlertStationUseCase {
         return GetAddedAlertStationUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetSubwayArrivalTimeUseCase(
+        repository: OpenApiRepository
+    ): GetSubwayArrivalTimeUseCase {
+        return GetSubwayArrivalTimeUseCase(repository)
     }
 
 }

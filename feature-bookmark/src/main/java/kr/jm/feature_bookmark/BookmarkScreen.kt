@@ -1,5 +1,6 @@
 package kr.jm.feature_bookmark
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,7 +26,11 @@ fun BookmarkScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
-        Text("지하철 도착 정보🚊", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+        Text(
+            "지하철 도착 정보🚊",
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.clickable { bookmarkViewModel.getSubwayArrivalTime() })
         CommonStationCard(
             primaryText = "야탑역",
             secondText = "도착: 3분전",

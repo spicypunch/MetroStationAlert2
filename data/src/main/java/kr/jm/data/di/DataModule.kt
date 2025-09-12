@@ -9,8 +9,10 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kr.jm.data.datastore.UserPreferencesDataStore
 import kr.jm.data.datasource.LocalSubwayStationDataSource
+import kr.jm.data.repository.OpenApiRepositoryImpl
 import kr.jm.data.repository.SubwayStationRepositoryImpl
 import kr.jm.data.repository.UserPreferencesRepositoryImpl
+import kr.jm.domain.repository.OpenApiRepository
 import kr.jm.domain.repository.SubwayStationRepository
 import kr.jm.domain.repository.UserPreferencesRepository
 import javax.inject.Singleton
@@ -30,6 +32,12 @@ abstract class DataModule {
     abstract fun bindUserPreferencesRepository(
         userPreferencesRepositoryImpl: UserPreferencesRepositoryImpl
     ): UserPreferencesRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindOpenApiRepository(
+        openApiRepositoryImpl: OpenApiRepositoryImpl
+    ): OpenApiRepository
 
     companion object {
         @Provides
