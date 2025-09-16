@@ -10,7 +10,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kr.jm.domain.model.SubwayArrivalResponse
-import kr.jm.domain.repository.OpenApiRepository
 import kr.jm.domain.usecase.GetBookmarkUseCase
 import kr.jm.domain.usecase.GetSubwayArrivalTimeUseCase
 import javax.inject.Inject
@@ -41,6 +40,14 @@ class BookmarkViewModel @Inject constructor(
         }
     }
 
+    fun refreshArrivalInfo() {
+        val bookmarks = _uiState.value.bookmarks
+        if (bookmarks.isNotEmpty()) {
+            _uiState.value = _uiState.value.copy(isLoading = true)
+            getSubwayArrivalTime(bookmarks)
+        }
+    }
+
     private fun getSubwayArrivalTime(stations: Set<String>) {
         viewModelScope.launch {
             val arrivalTimeMap: Map<String, SubwayArrivalResponse> = stations
@@ -59,8 +66,29 @@ class BookmarkViewModel @Inject constructor(
                 .toMap()
 
             _uiState.value = _uiState.value.copy(
-                arrivalTimeMap = arrivalTimeMap
+                arrivalTimeMap = arrivalTimeMap,
+                isLoading = false
             )
         }
+    }
+
+    fun processDirectionArrivalInfo(response: SubwayArrivalResponse): List<DirectionArrivalInfo> {
+        return response.realtimeArrivalList
+            .groupBy { it.updnLine } // 상행/하행으로 그룹핑
+            .map { (updownLine, arrivals) ->
+                val direction = arrivals.firstOrNull()?.trainLineNm?.split(" - ")?.firstOrNull() ?: "방향 정보 없음"
+                val arrivalInfoList = arrivals.map { arrival ->
+                    ArrivalInfo(
+                        message = arrival.arvlMsg2,
+                        trainLineNm = arrival.trainLineNm,
+                        receivedTime = arrival.recptnDt
+                    )
+                }
+                DirectionArrivalInfo(
+                    direction = direction,
+                    upDownLine = updownLine,
+                    arrivals = arrivalInfoList
+                )
+            }
     }
 }

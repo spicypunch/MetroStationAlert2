@@ -44,7 +44,8 @@ fun CommonStationCard(
     bookMarkIconVisible: Boolean = false,
     expandableIconVisible: Boolean = false,
     onClickNotificationIcon: (String) -> Unit = {},
-    onClickBookmarkIcon: (String) -> Unit = {}
+    onClickBookmarkIcon: (String) -> Unit = {},
+    expandableContent: (@Composable () -> Unit)? = null
 ) {
     var isExpanded by remember { mutableStateOf(false) }
 
@@ -122,20 +123,25 @@ fun CommonStationCard(
                         color = Color.Gray.copy(alpha = 0.3f),
                         thickness = 1.dp
                     )
-                    Column(
-                        modifier = Modifier.padding(16.dp)
-                    ) {
-                        Text(
-                            text = "도착 정보",
-                            fontWeight = FontWeight.Medium,
-                            fontSize = 14.sp
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Text(
-                            text = "여기에 추가 정보가 표시됩니다.",
-                            fontSize = 12.sp,
-                            color = Color.Gray
-                        )
+                    if (expandableContent != null) {
+                        expandableContent()
+                    } else {
+                        // 기본 확장 콘텐츠
+                        Column(
+                            modifier = Modifier.padding(16.dp)
+                        ) {
+                            Text(
+                                text = "도착 정보",
+                                fontWeight = FontWeight.Medium,
+                                fontSize = 14.sp
+                            )
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Text(
+                                text = "여기에 추가 정보가 표시됩니다.",
+                                fontSize = 12.sp,
+                                color = Color.Gray
+                            )
+                        }
                     }
                 }
             }
