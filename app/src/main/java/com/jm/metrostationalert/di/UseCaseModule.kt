@@ -10,6 +10,7 @@ import kr.jm.domain.repository.UserPreferencesRepository
 import kr.jm.domain.usecase.AddAlertStationUseCase
 import kr.jm.domain.usecase.AddBookmarkUseCase
 import kr.jm.domain.usecase.GetAddedAlertStationUseCase
+import kr.jm.domain.usecase.GetBookmarkUseCase
 import kr.jm.domain.usecase.GetSubwayArrivalTimeUseCase
 import kr.jm.domain.usecase.GetSubwayStationsUseCase
 import kr.jm.domain.usecase.RemoveBookmarkUseCase
@@ -74,6 +75,14 @@ object UseCaseModule {
         repository: OpenApiRepository
     ): GetSubwayArrivalTimeUseCase {
         return GetSubwayArrivalTimeUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetBookmarkUseCase(
+        repository: UserPreferencesRepository
+    ): GetBookmarkUseCase {
+        return GetBookmarkUseCase(repository)
     }
 
 }

@@ -54,6 +54,7 @@ fun SearchScreen(
     searchViewModel: SearchViewModel = hiltViewModel()
 ) {
     val searchScreenState by searchViewModel.uiState.collectAsStateWithLifecycle()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
