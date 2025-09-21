@@ -1,5 +1,4 @@
 package kr.jm.feature_bookmark
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -56,7 +55,7 @@ class BookmarkViewModel @Inject constructor(
                         try {
                             stationName to getSubwayArrivalTimeUseCase(stationName)
                         } catch (e: Exception) {
-                            Log.e("BookmarkViewModel", "Error getting subway arrival time: $e")
+                            // 에러 발생 시 해당 역은 제외
                             null
                         }
                     }

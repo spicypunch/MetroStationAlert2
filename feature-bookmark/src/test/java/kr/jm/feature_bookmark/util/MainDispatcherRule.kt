@@ -1,4 +1,4 @@
-package kr.jm.feature_search.util
+package kr.jm.feature_bookmark.util
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
