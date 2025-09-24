@@ -1,9 +1,15 @@
 package com.jm.metrostationalert
 
+import android.Manifest
+import android.content.Context
+import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,7 +27,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.gun0912.tedpermission.PermissionListener
+import com.gun0912.tedpermission.normal.TedPermission
 import com.jm.metrostationalert.navigation.BottomNavItem
+import com.jm.metrostationalert.service.LocationService
 import dagger.hilt.android.AndroidEntryPoint
 import kr.jm.common_ui.theme.bgColor
 import kr.jm.feature_bookmark.bookmarkScreen
@@ -31,9 +40,11 @@ import kr.jm.feature_settings.settingsScreen
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        requestPermission(this)
         setContent {
             MaterialTheme {
                 App()
@@ -121,4 +132,30 @@ fun MyBottomNavigation(
             )
         }
     }
+}
+
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
+fun requestPermission(context: Context) {
+    TedPermission.create()
+        .setPermissionListener(object : PermissionListener {
+            override fun onPermissionGranted() {
+                val intent = Intent(context, LocationService::class.java)
+                context.startForegroundService(intent)
+            }
+
+            override fun onPermissionDenied(deniedPermissions: List<String>) {
+                Toast.makeText(
+                    context,
+                    "권한을 허가해주세요.",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        })
+        .setDeniedMessage("권한을 허용해주세요. [설정] > [앱 및 알림] > [고급] > [앱 권한]")
+        .setPermissions(
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.POST_NOTIFICATIONS,
+        )
+        .check()
 }

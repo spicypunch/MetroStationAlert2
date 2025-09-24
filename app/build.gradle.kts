@@ -73,4 +73,10 @@ dependencies {
 
     // Navigation Compose
     implementation(libs.androidx.navigation.compose)
+
+    // Location Services
+    implementation(libs.play.services.location)
+
+    // TedPermission
+    implementation(libs.tedpermission.normal)
 }

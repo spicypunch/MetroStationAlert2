@@ -127,7 +127,15 @@ class SearchViewModel @Inject constructor(
 
     fun addAlertStation(stationName: String) {
         viewModelScope.launch {
-            addedAlertStationUseCase(stationName)
+            // 선택된 역의 전체 정보 찾기
+            val selectedStation = _uiState.value.allStations.find { it.stationName == stationName }
+            if (selectedStation != null) {
+                addedAlertStationUseCase(
+                    stationName = selectedStation.stationName,
+                    latitude = selectedStation.latitude,
+                    longitude = selectedStation.longitude
+                )
+            }
         }
     }
 

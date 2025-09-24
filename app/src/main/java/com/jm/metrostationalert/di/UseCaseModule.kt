@@ -4,16 +4,24 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kr.jm.domain.repository.LocationRepository
 import kr.jm.domain.repository.OpenApiRepository
 import kr.jm.domain.repository.SubwayStationRepository
 import kr.jm.domain.repository.UserPreferencesRepository
 import kr.jm.domain.usecase.AddAlertStationUseCase
 import kr.jm.domain.usecase.AddBookmarkUseCase
 import kr.jm.domain.usecase.GetAddedAlertStationUseCase
+import kr.jm.domain.usecase.GetAlertDistanceUseCase
+import kr.jm.domain.usecase.GetAlertSettingsUseCase
+import kr.jm.domain.usecase.GetAlertStationLocationUseCase
 import kr.jm.domain.usecase.GetBookmarkUseCase
+import kr.jm.domain.usecase.GetNotificationContentUseCase
+import kr.jm.domain.usecase.GetNotificationTitleUseCase
 import kr.jm.domain.usecase.GetSubwayArrivalTimeUseCase
 import kr.jm.domain.usecase.GetSubwayStationsUseCase
 import kr.jm.domain.usecase.RemoveBookmarkUseCase
+import kr.jm.domain.usecase.SaveAlertDistanceUseCase
+import kr.jm.domain.usecase.SaveNotificationSettingsUseCase
 import kr.jm.domain.usecase.SearchSubwayStationsUseCase
 import javax.inject.Singleton
 
@@ -83,6 +91,62 @@ object UseCaseModule {
         repository: UserPreferencesRepository
     ): GetBookmarkUseCase {
         return GetBookmarkUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetAlertStationLocationUseCase(
+        repository: LocationRepository
+    ): GetAlertStationLocationUseCase {
+        return GetAlertStationLocationUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetAlertSettingsUseCase(
+        repository: LocationRepository
+    ): GetAlertSettingsUseCase {
+        return GetAlertSettingsUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetAlertDistanceUseCase(
+        repository: UserPreferencesRepository
+    ): GetAlertDistanceUseCase {
+        return GetAlertDistanceUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetNotificationTitleUseCase(
+        repository: UserPreferencesRepository
+    ): GetNotificationTitleUseCase {
+        return GetNotificationTitleUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetNotificationContentUseCase(
+        repository: UserPreferencesRepository
+    ): GetNotificationContentUseCase {
+        return GetNotificationContentUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSaveAlertDistanceUseCase(
+        repository: UserPreferencesRepository
+    ): SaveAlertDistanceUseCase {
+        return SaveAlertDistanceUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSaveNotificationSettingsUseCase(
+        repository: UserPreferencesRepository
+    ): SaveNotificationSettingsUseCase {
+        return SaveNotificationSettingsUseCase(repository)
     }
 
 }

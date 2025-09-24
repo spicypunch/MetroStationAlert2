@@ -4,6 +4,8 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.doublePreferencesKey
+import androidx.datastore.preferences.core.floatPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
@@ -23,6 +25,11 @@ class UserPreferencesDataStore @Inject constructor(
         val BOOKMARKED_STATIONS = stringSetPreferencesKey("bookmarked_stations")
         val RECENT_SEARCHES = stringPreferencesKey("recent_searches")
         val ALERT_STATION = stringPreferencesKey("alert_station")
+        val LATITUDE = doublePreferencesKey("latitude")
+        val LONGITUDE = doublePreferencesKey("longitude")
+        val DISTANCE = floatPreferencesKey("distance")
+        val NOTI_TITLE = stringPreferencesKey("noti_title")
+        val NOTI_CONTENT = stringPreferencesKey("noti_content")
     }
 
     suspend fun addBookmark(stationName: String): Result<String> {
@@ -108,5 +115,65 @@ class UserPreferencesDataStore @Inject constructor(
         context.dataStore.edit { preferences ->
             preferences.remove(PreferencesKeys.RECENT_SEARCHES)
         }
+    }
+
+    suspend fun saveLocation(latitude: Double, longitude: Double) {
+        context.dataStore.edit { preferences ->
+            preferences[PreferencesKeys.LATITUDE] = latitude
+            preferences[PreferencesKeys.LONGITUDE] = longitude
+        }
+    }
+
+    fun getLatitude(): Flow<Double> {
+        return context.dataStore.data
+            .map { preferences ->
+                preferences[PreferencesKeys.LATITUDE] ?: 0.0
+            }
+            .distinctUntilChanged()
+    }
+
+    fun getLongitude(): Flow<Double> {
+        return context.dataStore.data
+            .map { preferences ->
+                preferences[PreferencesKeys.LONGITUDE] ?: 0.0
+            }
+            .distinctUntilChanged()
+    }
+
+    suspend fun saveDistance(distance: Float) {
+        context.dataStore.edit { preferences ->
+            preferences[PreferencesKeys.DISTANCE] = distance
+        }
+    }
+
+    fun getDistance(): Flow<Float> {
+        return context.dataStore.data
+            .map { preferences ->
+                preferences[PreferencesKeys.DISTANCE] ?: 1.0f
+            }
+            .distinctUntilChanged()
+    }
+
+    suspend fun saveNotificationSettings(title: String, content: String) {
+        context.dataStore.edit { preferences ->
+            preferences[PreferencesKeys.NOTI_TITLE] = title
+            preferences[PreferencesKeys.NOTI_CONTENT] = content
+        }
+    }
+
+    fun getNotiTitle(): Flow<String> {
+        return context.dataStore.data
+            .map { preferences ->
+                preferences[PreferencesKeys.NOTI_TITLE] ?: "하차 알림"
+            }
+            .distinctUntilChanged()
+    }
+
+    fun getNotiContent(): Flow<String> {
+        return context.dataStore.data
+            .map { preferences ->
+                preferences[PreferencesKeys.NOTI_CONTENT] ?: "곧 하차하실 역입니다."
+            }
+            .distinctUntilChanged()
     }
 }

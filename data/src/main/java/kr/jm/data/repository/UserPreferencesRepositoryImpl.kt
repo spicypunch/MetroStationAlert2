@@ -23,8 +23,14 @@ class UserPreferencesRepositoryImpl @Inject constructor(
         return dataStore.getBookmarks()
     }
 
-    override suspend fun addAlertStation(stationName: String): Result<String> {
-        return dataStore.addAlertStation(stationName)
+    override suspend fun addAlertStationWithLocation(stationName: String, latitude: Double, longitude: Double): Result<String> {
+        return try {
+            dataStore.addAlertStation(stationName)
+            dataStore.saveLocation(latitude, longitude)
+            Result.success(stationName)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
     }
 
     override fun getAddedAlertStation(): Flow<String?> {
@@ -41,5 +47,35 @@ class UserPreferencesRepositoryImpl @Inject constructor(
 
     override suspend fun clearRecentSearches() {
         dataStore.clearRecentSearches()
+    }
+
+    override suspend fun saveDistance(distance: Float): Result<Unit> {
+        return try {
+            dataStore.saveDistance(distance)
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    override fun getDistance(): Flow<Float> {
+        return dataStore.getDistance()
+    }
+
+    override suspend fun saveNotificationSettings(title: String, content: String): Result<Unit> {
+        return try {
+            dataStore.saveNotificationSettings(title, content)
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    override fun getNotiTitle(): Flow<String> {
+        return dataStore.getNotiTitle()
+    }
+
+    override fun getNotiContent(): Flow<String> {
+        return dataStore.getNotiContent()
     }
 }

@@ -52,7 +52,7 @@ fun BookmarkScreen(
                 Icon(
                     imageVector = Icons.Default.Refresh,
                     contentDescription = "새로고침",
-                    tint = if (bookmarkScreenState.isLoading) Color.Blue else Color.Gray
+                    tint = if (bookmarkScreenState.isLoading) Color.Black else Color.Gray
                 )
             }
         }
