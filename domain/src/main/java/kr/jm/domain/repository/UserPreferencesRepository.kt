@@ -16,4 +16,7 @@ interface UserPreferencesRepository {
     suspend fun saveNotificationSettings(title: String, content: String): Result<Unit>
     fun getNotiTitle(): Flow<String>
     fun getNotiContent(): Flow<String>
+    suspend fun resetAlertState(): Result<Unit>
+    fun getAlertState(): Flow<Boolean>
+    suspend fun setAlertState(isActive: Boolean): Result<Unit>
 }

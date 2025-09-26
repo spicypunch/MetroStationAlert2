@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.doublePreferencesKey
 import androidx.datastore.preferences.core.floatPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
@@ -30,6 +31,7 @@ class UserPreferencesDataStore @Inject constructor(
         val DISTANCE = floatPreferencesKey("distance")
         val NOTI_TITLE = stringPreferencesKey("noti_title")
         val NOTI_CONTENT = stringPreferencesKey("noti_content")
+        val ALERT_STATE = booleanPreferencesKey("alert_state")
     }
 
     suspend fun addBookmark(stationName: String): Result<String> {
@@ -175,5 +177,35 @@ class UserPreferencesDataStore @Inject constructor(
                 preferences[PreferencesKeys.NOTI_CONTENT] ?: "곧 하차하실 역입니다."
             }
             .distinctUntilChanged()
+    }
+
+    suspend fun resetAlertState(): Result<Unit> {
+        return try {
+            context.dataStore.edit { preferences ->
+                preferences[PreferencesKeys.ALERT_STATE] = true
+            }
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    fun getAlertState(): Flow<Boolean> {
+        return context.dataStore.data
+            .map { preferences ->
+                preferences[PreferencesKeys.ALERT_STATE] ?: true
+            }
+            .distinctUntilChanged()
+    }
+
+    suspend fun setAlertState(isActive: Boolean): Result<Unit> {
+        return try {
+            context.dataStore.edit { preferences ->
+                preferences[PreferencesKeys.ALERT_STATE] = isActive
+            }
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
     }
 }

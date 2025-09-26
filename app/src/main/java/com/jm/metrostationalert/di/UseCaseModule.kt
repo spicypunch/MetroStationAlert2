@@ -13,6 +13,7 @@ import kr.jm.domain.usecase.AddBookmarkUseCase
 import kr.jm.domain.usecase.GetAddedAlertStationUseCase
 import kr.jm.domain.usecase.GetAlertDistanceUseCase
 import kr.jm.domain.usecase.GetAlertSettingsUseCase
+import kr.jm.domain.usecase.GetAlertStateUseCase
 import kr.jm.domain.usecase.GetAlertStationLocationUseCase
 import kr.jm.domain.usecase.GetBookmarkUseCase
 import kr.jm.domain.usecase.GetNotificationContentUseCase
@@ -20,6 +21,7 @@ import kr.jm.domain.usecase.GetNotificationTitleUseCase
 import kr.jm.domain.usecase.GetSubwayArrivalTimeUseCase
 import kr.jm.domain.usecase.GetSubwayStationsUseCase
 import kr.jm.domain.usecase.RemoveBookmarkUseCase
+import kr.jm.domain.usecase.ResetAlertStateUseCase
 import kr.jm.domain.usecase.SaveAlertDistanceUseCase
 import kr.jm.domain.usecase.SaveNotificationSettingsUseCase
 import kr.jm.domain.usecase.SearchSubwayStationsUseCase
@@ -147,6 +149,22 @@ object UseCaseModule {
         repository: UserPreferencesRepository
     ): SaveNotificationSettingsUseCase {
         return SaveNotificationSettingsUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetAlertStateUseCase(
+        repository: UserPreferencesRepository
+    ): GetAlertStateUseCase {
+        return GetAlertStateUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideResetAlertStateUseCase(
+        repository: UserPreferencesRepository
+    ): ResetAlertStateUseCase {
+        return ResetAlertStateUseCase(repository)
     }
 
 }
