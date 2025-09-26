@@ -16,8 +16,10 @@ import kr.jm.domain.model.SubwayStation
 import kr.jm.domain.usecase.AddAlertStationUseCase
 import kr.jm.domain.usecase.AddBookmarkUseCase
 import kr.jm.domain.usecase.GetAddedAlertStationUseCase
+import kr.jm.domain.usecase.GetAlertStateUseCase
 import kr.jm.domain.usecase.GetSubwayStationsUseCase
 import kr.jm.domain.usecase.RemoveBookmarkUseCase
+import kr.jm.domain.usecase.ResetAlertStateUseCase
 import kr.jm.domain.usecase.SearchSubwayStationsUseCase
 import javax.inject.Inject
 
@@ -28,7 +30,9 @@ class SearchViewModel @Inject constructor(
     private val addBookmarkUseCase: AddBookmarkUseCase,
     private val removeBookmarkUseCase: RemoveBookmarkUseCase,
     private val addedAlertStationUseCase: AddAlertStationUseCase,
-    private val getAddedAlertStationUseCase: GetAddedAlertStationUseCase
+    private val getAddedAlertStationUseCase: GetAddedAlertStationUseCase,
+    private val getAlertStateUseCase: GetAlertStateUseCase,
+    private val resetAlertStateUseCase: ResetAlertStateUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(SearchScreenState())
@@ -52,6 +56,7 @@ class SearchViewModel @Inject constructor(
     init {
         loadAllStations()
         loadAddedAlertStation()
+        loadAlertState()
     }
 
     private fun loadAllStations() {
@@ -92,6 +97,17 @@ class SearchViewModel @Inject constructor(
                 .collectLatest {
                     _uiState.value = _uiState.value.copy(
                         addedAlertStation = it
+                    )
+                }
+        }
+    }
+
+    private fun loadAlertState() {
+        viewModelScope.launch {
+            getAlertStateUseCase()
+                .collectLatest { isActive ->
+                    _uiState.value = _uiState.value.copy(
+                        isAlertActive = isActive
                     )
                 }
         }
@@ -174,6 +190,12 @@ class SearchViewModel @Inject constructor(
     fun removeBookmark(stationName: String) {
         viewModelScope.launch {
             removeBookmarkUseCase(stationName)
+        }
+    }
+
+    fun resetAlertState() {
+        viewModelScope.launch {
+            resetAlertStateUseCase()
         }
     }
 }
