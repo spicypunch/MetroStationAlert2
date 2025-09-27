@@ -2,7 +2,6 @@ package kr.jm.feature_search
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -18,7 +17,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Notifications
-import androidx.compose.material.icons.outlined.Star
+import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -73,7 +72,15 @@ fun SearchScreen(
         Spacer(modifier = Modifier.height(8.dp))
 
         if (searchScreenState.addedAlertStation.isNotBlank()) {
-            CommonStationCard(primaryText = "하차 알림", secondText = searchScreenState.addedAlertStation)
+            CommonStationCard(
+                primaryText = searchScreenState.addedAlertStation,
+                secondText = "알림 설정된 역",
+                showAlertStatus = true,
+                isAlertActive = searchScreenState.isAlertActive,
+                onClickReactivateAlert = { stationName ->
+                    searchViewModel.reactivateAlert()
+                }
+            )
         }
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -247,6 +254,7 @@ private fun StationItem(
         onClickBookmarkIcon = onClickBookmarkIcon
     )
 }
+
 
 @Preview(showSystemUi = true)
 @Composable

@@ -78,4 +78,5 @@ class UserPreferencesRepositoryImpl @Inject constructor(
     override fun getNotiContent(): Flow<String> {
         return dataStore.getNotiContent()
     }
+
 }

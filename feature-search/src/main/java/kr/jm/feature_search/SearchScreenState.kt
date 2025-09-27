@@ -51,4 +51,5 @@ data class SearchScreenState(
     val dropDownExpanded: Boolean = false,
     val isLoading: Boolean = false,
     val errorMessage: String? = null,
+    val isAlertActive: Boolean = true,
 )

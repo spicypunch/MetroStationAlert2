@@ -18,6 +18,8 @@ import androidx.compose.material.icons.outlined.KeyboardArrowDown
 import androidx.compose.material.icons.outlined.KeyboardArrowUp
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.Star
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
@@ -43,8 +45,11 @@ fun CommonStationCard(
     isBookmark: Boolean = false,
     bookMarkIconVisible: Boolean = false,
     expandableIconVisible: Boolean = false,
+    isAlertActive: Boolean? = null,
+    showAlertStatus: Boolean = false,
     onClickNotificationIcon: (String) -> Unit = {},
     onClickBookmarkIcon: (String) -> Unit = {},
+    onClickReactivateAlert: (String) -> Unit = {},
     expandableContent: (@Composable () -> Unit)? = null
 ) {
     var isExpanded by remember { mutableStateOf(false) }
@@ -100,7 +105,35 @@ fun CommonStationCard(
                     }
                 }
 
-                // 확장/축소 아이콘
+                if (showAlertStatus && isAlertActive != null) {
+                    if (isAlertActive) {
+                        Icon(
+                            imageVector = Icons.Outlined.Notifications,
+                            contentDescription = "Alert Active",
+                            tint = Color(0xFF4CAF50),
+                            modifier = Modifier.padding(8.dp)
+                        )
+                    } else {
+                        Button(
+                            onClick = { onClickReactivateAlert(primaryText) },
+                            modifier = Modifier
+                                .height(40.dp)
+                                .padding(horizontal = 8.dp)
+                                .border(1.dp, Color.Black, RoundedCornerShape(12.dp)),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = Color.White,
+                            ),
+                            shape = RoundedCornerShape(12.dp)
+                        ) {
+                            Text(
+                                text = "다시알림",
+                                color = Color.Black,
+                                fontSize = 12.sp
+                            )
+                        }
+                    }
+                }
+
                 if (expandableIconVisible) {
                     IconButton(onClick = { isExpanded = !isExpanded }) {
                         Icon(
@@ -112,7 +145,6 @@ fun CommonStationCard(
                 }
             }
 
-            // 확장 가능한 콘텐츠 영역
             AnimatedVisibility(
                 visible = isExpanded && expandableIconVisible,
                 enter = expandVertically(),
