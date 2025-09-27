@@ -7,4 +7,6 @@ import kr.jm.domain.model.LocationData
 interface LocationRepository {
     fun getAlertStationLocation(): Flow<LocationData>
     fun getAlertSettings(): Flow<AlertSettings>
+    fun getAlertState(): Flow<Boolean>
+    suspend fun reactivateAlert()
 }

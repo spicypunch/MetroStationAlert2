@@ -72,10 +72,14 @@ fun SearchScreen(
         Spacer(modifier = Modifier.height(8.dp))
 
         if (searchScreenState.addedAlertStation.isNotBlank()) {
-            AlertStatusSection(
-                stationName = searchScreenState.addedAlertStation,
+            CommonStationCard(
+                primaryText = searchScreenState.addedAlertStation,
+                secondText = "알림 설정된 역",
+                showAlertStatus = true,
                 isAlertActive = searchScreenState.isAlertActive,
-                onResetAlert = { searchViewModel.resetAlertState() }
+                onClickReactivateAlert = { stationName ->
+                    searchViewModel.reactivateAlert()
+                }
             )
         }
 
@@ -251,79 +255,6 @@ private fun StationItem(
     )
 }
 
-@Composable
-private fun AlertStatusSection(
-    stationName: String,
-    isAlertActive: Boolean,
-    onResetAlert: () -> Unit
-) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 4.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-        shape = RoundedCornerShape(12.dp)
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.weight(1f)
-            ) {
-                Icon(
-                    imageVector = Icons.Outlined.Notifications,
-                    contentDescription = null,
-                    tint = if (isAlertActive) Color.Green else Color.Red
-                )
-                Spacer(modifier = Modifier.width(12.dp))
-                Column {
-                    Text(
-                        text = "하차 알림",
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.Black
-                    )
-                    Text(
-                        text = stationName,
-                        fontSize = 12.sp,
-                        color = Color.Gray
-                    )
-                    Text(
-                        text = if (isAlertActive) "알림 활성화" else "알림 비활성화",
-                        fontSize = 10.sp,
-                        color = if (isAlertActive) Color.Green else Color.Red
-                    )
-                }
-            }
-
-            if (!isAlertActive) {
-                Button(
-                    onClick = onResetAlert,
-                    colors = ButtonDefaults.buttonColors(containerColor = Color.Blue),
-                    shape = RoundedCornerShape(8.dp)
-                ) {
-                    Icon(
-                        imageVector = Icons.Outlined.Refresh,
-                        contentDescription = null,
-                        tint = Color.White
-                    )
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text(
-                        text = "알림 재활성화",
-                        color = Color.White,
-                        fontSize = 12.sp
-                    )
-                }
-            }
-        }
-    }
-}
 
 @Preview(showSystemUi = true)
 @Composable

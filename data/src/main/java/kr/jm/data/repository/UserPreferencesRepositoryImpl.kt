@@ -79,15 +79,4 @@ class UserPreferencesRepositoryImpl @Inject constructor(
         return dataStore.getNotiContent()
     }
 
-    override suspend fun resetAlertState(): Result<Unit> {
-        return dataStore.resetAlertState()
-    }
-
-    override fun getAlertState(): Flow<Boolean> {
-        return dataStore.getAlertState()
-    }
-
-    override suspend fun setAlertState(isActive: Boolean): Result<Unit> {
-        return dataStore.setAlertState(isActive)
-    }
 }

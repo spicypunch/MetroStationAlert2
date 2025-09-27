@@ -20,8 +20,8 @@ import kr.jm.domain.usecase.GetNotificationContentUseCase
 import kr.jm.domain.usecase.GetNotificationTitleUseCase
 import kr.jm.domain.usecase.GetSubwayArrivalTimeUseCase
 import kr.jm.domain.usecase.GetSubwayStationsUseCase
+import kr.jm.domain.usecase.ReactivateAlertUseCase
 import kr.jm.domain.usecase.RemoveBookmarkUseCase
-import kr.jm.domain.usecase.ResetAlertStateUseCase
 import kr.jm.domain.usecase.SaveAlertDistanceUseCase
 import kr.jm.domain.usecase.SaveNotificationSettingsUseCase
 import kr.jm.domain.usecase.SearchSubwayStationsUseCase
@@ -154,17 +154,17 @@ object UseCaseModule {
     @Provides
     @Singleton
     fun provideGetAlertStateUseCase(
-        repository: UserPreferencesRepository
+        repository: LocationRepository
     ): GetAlertStateUseCase {
         return GetAlertStateUseCase(repository)
     }
 
     @Provides
     @Singleton
-    fun provideResetAlertStateUseCase(
-        repository: UserPreferencesRepository
-    ): ResetAlertStateUseCase {
-        return ResetAlertStateUseCase(repository)
+    fun provideReactivateAlertUseCase(
+        repository: LocationRepository
+    ): ReactivateAlertUseCase {
+        return ReactivateAlertUseCase(repository)
     }
 
 }

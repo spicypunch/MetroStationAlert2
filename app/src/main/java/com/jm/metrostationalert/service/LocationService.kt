@@ -29,9 +29,8 @@ import kr.jm.domain.model.AlertSettings
 import kr.jm.domain.model.LocationData
 import kr.jm.domain.usecase.GetAlertSettingsUseCase
 import kr.jm.domain.usecase.GetAlertStationLocationUseCase
-import kr.jm.domain.usecase.GetAlertStateUseCase
-import kr.jm.domain.repository.UserPreferencesRepository
 import kr.jm.domain.util.LocationUtils
+import kr.jm.data.repository.LocationRepositoryImpl
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -44,10 +43,7 @@ class LocationService : Service() {
     lateinit var getAlertSettingsUseCase: GetAlertSettingsUseCase
 
     @Inject
-    lateinit var getAlertStateUseCase: GetAlertStateUseCase
-
-    @Inject
-    lateinit var userPreferencesRepository: UserPreferencesRepository
+    lateinit var locationRepositoryImpl: LocationRepositoryImpl
 
     private val serviceScope = CoroutineScope(Dispatchers.IO + Job())
     private var bookmarkLocationData: LocationData? = null
@@ -74,17 +70,17 @@ class LocationService : Service() {
             combine(
                 getAlertStationLocationUseCase(),
                 getAlertSettingsUseCase(),
-                getAlertStateUseCase()
-            ) { location, settings, alertState ->
-                Triple(location, settings, alertState)
-            }.collect { (location, settings, state) ->
+                locationRepositoryImpl.getAlertState()
+            ) { location, settings, alertStateFromRepo ->
+                Triple(location, settings, alertStateFromRepo)
+            }.collect { (location, settings, alertStateFromRepo) ->
                 Log.d(TAG, "User preferences updated:")
                 Log.d(TAG, "  Location: $location")
                 Log.d(TAG, "  Settings: $settings")
-                Log.d(TAG, "  Alert State: $state")
+                Log.d(TAG, "  Alert state: $alertStateFromRepo")
                 bookmarkLocationData = location
                 alertSettings = settings
-                alertState = state
+                alertState = alertStateFromRepo
             }
         }
     }
@@ -163,10 +159,12 @@ class LocationService : Service() {
         if (distance <= settings.alertDistance && alertState) {
             Log.i(TAG, "Sending notification - distance $distance <= ${settings.alertDistance}")
             sendNotification()
-            // 알림을 보낸 후 상태를 false로 변경
-            serviceScope.launch {
-                userPreferencesRepository.setAlertState(false)
-            }
+            locationRepositoryImpl.setAlertState(false) // 알림 후 비활성화
+        } else if (distance > settings.alertDistance && !alertState) {
+            Log.d(TAG, "Distance $distance > ${settings.alertDistance} - resetting alert state")
+            locationRepositoryImpl.setAlertState(true) // 거리벗어나면 다시 활성화
+        } else {
+            Log.d(TAG, "Alert state: $alertState, distance: $distance")
         }
     }
 

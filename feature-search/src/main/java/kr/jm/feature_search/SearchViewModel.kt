@@ -18,8 +18,8 @@ import kr.jm.domain.usecase.AddBookmarkUseCase
 import kr.jm.domain.usecase.GetAddedAlertStationUseCase
 import kr.jm.domain.usecase.GetAlertStateUseCase
 import kr.jm.domain.usecase.GetSubwayStationsUseCase
+import kr.jm.domain.usecase.ReactivateAlertUseCase
 import kr.jm.domain.usecase.RemoveBookmarkUseCase
-import kr.jm.domain.usecase.ResetAlertStateUseCase
 import kr.jm.domain.usecase.SearchSubwayStationsUseCase
 import javax.inject.Inject
 
@@ -32,7 +32,7 @@ class SearchViewModel @Inject constructor(
     private val addedAlertStationUseCase: AddAlertStationUseCase,
     private val getAddedAlertStationUseCase: GetAddedAlertStationUseCase,
     private val getAlertStateUseCase: GetAlertStateUseCase,
-    private val resetAlertStateUseCase: ResetAlertStateUseCase
+    private val reactivateAlertUseCase: ReactivateAlertUseCase,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(SearchScreenState())
@@ -110,6 +110,12 @@ class SearchViewModel @Inject constructor(
                         isAlertActive = isActive
                     )
                 }
+        }
+    }
+
+    fun reactivateAlert() {
+        viewModelScope.launch {
+            reactivateAlertUseCase()
         }
     }
 
@@ -193,9 +199,4 @@ class SearchViewModel @Inject constructor(
         }
     }
 
-    fun resetAlertState() {
-        viewModelScope.launch {
-            resetAlertStateUseCase()
-        }
-    }
 }
