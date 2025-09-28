@@ -150,5 +150,3 @@ cd MetroStationAlert2
 - ✅ **Clean Architecture**: 명확한 레이어 분리
 - ✅ **모듈화**: 기능별 독립적인 모듈 구조
 - ✅ **현대적 기술 스택**: 최신 Android 기술 적용
-
-Project Link: [https://github.com/yourusername/MetroStationAlert2](https://github.com/yourusername/MetroStationAlert2)
