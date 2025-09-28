@@ -1,4 +1,4 @@
-# 🚇 Metro Station Alert
+ # 🚇 Metro Station Alert
 
 > 지하철 하차 알림 앱 - 목적지 역 근처에 도착하면 자동으로 알림을 받아보세요!
 
@@ -150,3 +150,6 @@ cd MetroStationAlert2
 - ✅ **Clean Architecture**: 명확한 레이어 분리
 - ✅ **모듈화**: 기능별 독립적인 모듈 구조
 - ✅ **현대적 기술 스택**: 최신 Android 기술 적용
+
+## 화면
+
