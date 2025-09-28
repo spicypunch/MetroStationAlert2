@@ -1,4 +1,4 @@
-<img width="1080" height="2392" alt="KakaoTalk_Image_2025-09-28-17-02-09_006" src="https://github.com/user-attachments/assets/34767603-a1e0-49e5-bbbf-5ebc8ddd764c" /> # 🚇 Metro Station Alert
+# 🚇 Metro Station Alert
 
 > 지하철 하차 알림 앱 - 목적지 역 근처에 도착하면 자동으로 알림을 받아보세요!
 
