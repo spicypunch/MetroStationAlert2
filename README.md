@@ -41,6 +41,10 @@ Metro Station Alert는 **위치 기반 지하철 하차 알림 서비스**를 �
 - 알림 받을 제목과 내용을 수정할 수 있습니다.
 - 하차 예정인 역과 몇 km 안에 근접했을 시 알림을 받을지 설정할 수 있습니다.
 
+**알림**
+<img src="https://github.com/user-attachments/assets/912c85bb-318d-4b3e-9f44-f57cf8c87ddf" width=200>
+<img src="https://github.com/user-attachments/assets/ec1f5b83-c44b-45f4-88de-97b74521638e" width=200>
+
 ### ✨ 주요 기능
 
 | 기능 | 설명 |
