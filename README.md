@@ -1,4 +1,4 @@
- # 🚇 Metro Station Alert
+<img width="1080" height="2392" alt="KakaoTalk_Image_2025-09-28-17-02-09_006" src="https://github.com/user-attachments/assets/34767603-a1e0-49e5-bbbf-5ebc8ddd764c" /> # 🚇 Metro Station Alert
 
 > 지하철 하차 알림 앱 - 목적지 역 근처에 도착하면 자동으로 알림을 받아보세요!
 
@@ -150,6 +150,24 @@ cd MetroStationAlert2
 - ✅ **Clean Architecture**: 명확한 레이어 분리
 - ✅ **모듈화**: 기능별 독립적인 모듈 구조
 - ✅ **현대적 기술 스택**: 최신 Android 기술 적용
+<img width="1080" height="2392" alt="KakaoTalk_Image_2025-09-28-17-02-09_008" src="https://github.com/user-attachments/assets/b6f7506a-1c57-436d-95fe-dfd2ccd448f9" />
 
 ## 화면
+**검색**
+<img src="https://github.com/user-attachments/assets/96979eaa-4a63-449c-b814-c4168c8e962e" width=200>
+**즐겨찾기**
+
+**설정**
+<img width="1080" height="2392" alt="KakaoTalk_Image_2025-09-28-17-02-08_001" src="https://github.com/user-attachments/assets/96979eaa-4a63-449c-b814-c4168c8e962e" />
+<img width="1080" height="2392" alt="KakaoTalk_Image_2025-09-28-17-02-09_002" src="https://github.com/user-attachments/assets/64374dd9-fd8b-49f9-98df-005797887187" />
+<img width="1080" height="2392" alt="KakaoTalk_Image_2025-09-28-17-02-09_003" src="https://github.com/user-attachments/assets/76abe7a1-0833-4268-8e63-93641dd98fcf" />
+<img width="1080" height="2392" alt="KakaoTalk_Image_2025-09-28-17-02-09_004" src="https://github.com/user-attachments/assets/c1aa4d13-4946-45d2-9f01-1146458de4ca" />
+<img width="1080" height="2392" alt="KakaoTalk_Image_2025-09-28-17-02-09_005" src="https://github.com/user-attachments/assets/d6c43fbc-5370-47a7-9604-ecb295d94c23" />
+<img width="1080" height="2392" alt="KakaoTalk_Image_2025-09-28-17-02-09_006" src="https://github.com/user-attachments/assets/db96b339-624f-44a3-a8b5-92b33921dcfb" />
+<img width="1080" height="2392" alt="KakaoTalk_Image_2025-09-28-17-02-09_007" src="https://github.com/user-attachments/assets/28f74618-0837-4402-b89e-a1b42fee57f5" />
+<img width="1080" height="2392" alt="KakaoTalk_Image_2025-09-28-17-02-09_008" src="https://github.com/user-attachments/assets/8371f726-b4a4-4391-8248-7085b88a7f13" />
+<img width="1080" height="2392" alt="KakaoTalk_Image_2025-09-28-17-02-09_009" src="https://github.com/user-attachments/assets/e2ecf1ef-d017-462f-8366-012600982ede" />
+<img width="1080" height="2392" alt="KakaoTalk_Image_2025-09-28-17-02-09_010" src="https://github.com/user-attachments/assets/5b17188a-99a8-40ef-8fff-b799c7b34a55" />
+<img width="1080" height="2392" alt="KakaoTalk_Image_2025-09-28-17-02-09_011" src="https://github.com/user-attachments/assets/8eb234a9-4bf7-4f80-949d-ea88ddae32cf" />
+
 
