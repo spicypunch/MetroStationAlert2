@@ -154,18 +154,29 @@ cd MetroStationAlert2
 ## 화면
 **검색**
 
+<img src="https://github.com/user-attachments/assets/e2ecf1ef-d017-462f-8366-012600982ede" width=200>
 <img src="https://github.com/user-attachments/assets/96979eaa-4a63-449c-b814-c4168c8e962e" width=200>
 <img src="https://github.com/user-attachments/assets/d6c43fbc-5370-47a7-9604-ecb295d94c23" width=200>
 <img src="https://github.com/user-attachments/assets/28f74618-0837-4402-b89e-a1b42fee57f5" width=200>
-<img src="https://github.com/user-attachments/assets/8371f726-b4a4-4391-8248-7085b88a7f13" width=200>
-<img src="https://github.com/user-attachments/assets/e2ecf1ef-d017-462f-8366-012600982ede" width=200>
+
+- 전국 지하철 역을 조회할 수 있습니다.
+- 필터를 통해 지하철 노선도를, 검색을 통해 지하철 역을 찾을 수 있습니다.
+- 알림 버튼을 통해 하차 알림을 받을 역을 선택할 수 있습니다.
+- 즐겨찾기 버튼을 통해 지하철 도착 시간을 확인할 수 있습니다.
+
 
 
 **즐겨찾기**
 
 <img src="https://github.com/user-attachments/assets/8eb234a9-4bf7-4f80-949d-ea88ddae32cf" width=200>
 
+- 즐겨찾기한 역들을 지하철의 노선 방향을 기준으로 도착 예정 시간을 볼 수 있습니다.
+- 새로고침 버튼을 통해 도착 정보를 새로 받아올 수 있습니다.
+
 **설정**
 
 <img src="https://github.com/user-attachments/assets/5b17188a-99a8-40ef-8fff-b799c7b34a55" width=200>
 <img src="https://github.com/user-attachments/assets/c1aa4d13-4946-45d2-9f01-1146458de4ca" width=200>
+
+- 알림 받을 제목과 내용을 수정할 수 있습니다.
+- 하차 예정인 역과 몇 km 안에 근접했을 시 알림을 받을지 설정할 수 있습니다.
