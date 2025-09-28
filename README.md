@@ -156,8 +156,6 @@ cd MetroStationAlert2
 
 <img src="https://github.com/user-attachments/assets/96979eaa-4a63-449c-b814-c4168c8e962e" width=200>
 <img src="https://github.com/user-attachments/assets/d6c43fbc-5370-47a7-9604-ecb295d94c23" width=200>
-<img src="https://github.com/user-attachments/assets/64374dd9-fd8b-49f9-98df-005797887187" width=200>
-<img src="https://github.com/user-attachments/assets/db96b339-624f-44a3-a8b5-92b33921dcfb" width=200>
 <img src="https://github.com/user-attachments/assets/28f74618-0837-4402-b89e-a1b42fee57f5" width=200>
 <img src="https://github.com/user-attachments/assets/8371f726-b4a4-4391-8248-7085b88a7f13" width=200>
 <img src="https://github.com/user-attachments/assets/e2ecf1ef-d017-462f-8366-012600982ede" width=200>
