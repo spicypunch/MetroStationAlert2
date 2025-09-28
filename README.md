@@ -154,7 +154,6 @@ cd MetroStationAlert2
 ## 화면
 **검색**
 <img src="https://github.com/user-attachments/assets/96979eaa-4a63-449c-b814-c4168c8e962e" width=200>
-<img src="https://github.com/user-attachments/assets/76abe7a1-0833-4268-8e63-93641dd98fcf" width=200>
 <img src="https://github.com/user-attachments/assets/d6c43fbc-5370-47a7-9604-ecb295d94c23" width=200>
 <img src="https://github.com/user-attachments/assets/64374dd9-fd8b-49f9-98df-005797887187" width=200>
 <img src="https://github.com/user-attachments/assets/c1aa4d13-4946-45d2-9f01-1146458de4ca" width=200>
@@ -162,9 +161,9 @@ cd MetroStationAlert2
 <img src="https://github.com/user-attachments/assets/28f74618-0837-4402-b89e-a1b42fee57f5" width=200>
 <img src="https://github.com/user-attachments/assets/8371f726-b4a4-4391-8248-7085b88a7f13" width=200>
 <img src="https://github.com/user-attachments/assets/e2ecf1ef-d017-462f-8366-012600982ede" width=200>
-<img src="https://github.com/user-attachments/assets/5b17188a-99a8-40ef-8fff-b799c7b34a55" width=200>
-<img src="https://github.com/user-attachments/assets/8eb234a9-4bf7-4f80-949d-ea88ddae32cf" width=200>
+
+
 **즐겨찾기**
-
+<img src="https://github.com/user-attachments/assets/8eb234a9-4bf7-4f80-949d-ea88ddae32cf" width=200>
 **설정**
-
+<img src="https://github.com/user-attachments/assets/5b17188a-99a8-40ef-8fff-b799c7b34a55" width=200>
