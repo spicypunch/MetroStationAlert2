@@ -16,7 +16,6 @@ Metro Station Alert는 **위치 기반 지하철 하차 알림 서비스**를 �
 
 <img src="https://github.com/user-attachments/assets/e2ecf1ef-d017-462f-8366-012600982ede" width=200>
 <img src="https://github.com/user-attachments/assets/d6c43fbc-5370-47a7-9604-ecb295d94c23" width=200>
-<img src="https://github.com/user-attachments/assets/96979eaa-4a63-449c-b814-c4168c8e962e" width=200>
 <img src="https://github.com/user-attachments/assets/28f74618-0837-4402-b89e-a1b42fee57f5" width=200>
 
 - 전국 지하철 역을 조회할 수 있습니다.
