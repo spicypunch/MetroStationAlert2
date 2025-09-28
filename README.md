@@ -151,20 +151,4 @@ cd MetroStationAlert2
 - ✅ **모듈화**: 기능별 독립적인 모듈 구조
 - ✅ **현대적 기술 스택**: 최신 Android 기술 적용
 
-## 🤝 기여하기
-
-1. Fork the project
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-## 📄 라이선스
-
-이 프로젝트는 MIT 라이선스 하에 배포됩니다. 자세한 내용은 `LICENSE` 파일을 참조하세요.
-
-## 📞 연락처
-
-프로젝트 관련 문의: [your-email@example.com]
-
 Project Link: [https://github.com/yourusername/MetroStationAlert2](https://github.com/yourusername/MetroStationAlert2)
