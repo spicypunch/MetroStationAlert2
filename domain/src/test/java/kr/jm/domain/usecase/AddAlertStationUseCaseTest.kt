@@ -21,33 +21,45 @@ class AddAlertStationUseCaseTest {
     }
 
     @Test
-    fun `하차 알림 받을 지하철 역 추가 성공 시 Result_success 반환`() = runTest {
+    fun `하차 알림 역 추가 성공 시 Result_success 반환`() = runTest {
         // Given
         val stationName = "야탑역"
+        val latitude = 37.411
+        val longitude = 127.128
         val expectedResult = Result.success(stationName)
-        coEvery { userPreferencesRepository.addAlertStation(stationName) } returns expectedResult
+        coEvery {
+            userPreferencesRepository.addAlertStationWithLocation(stationName, latitude, longitude)
+        } returns expectedResult
 
         // When
-        val result = addAlertStationUseCase(stationName)
+        val result = addAlertStationUseCase(stationName, latitude, longitude)
 
         // Then
         assertEquals(expectedResult, result)
-        coVerify(exactly = 1) { userPreferencesRepository.addAlertStation(stationName) }
+        coVerify(exactly = 1) {
+            userPreferencesRepository.addAlertStationWithLocation(stationName, latitude, longitude)
+        }
     }
 
     @Test
-    fun `하차 알림 받을 지하철 역 추가 실패 시 Result_failure 반환`() = runTest {
+    fun `하차 알림 역 추가 실패 시 Result_failure 반환`() = runTest {
         // Given
         val stationName = "야탑역"
+        val latitude = 37.411
+        val longitude = 127.128
         val exception = Exception("DataStore error")
         val expectedResult = Result.failure<String>(exception)
-        coEvery { userPreferencesRepository.addAlertStation(stationName) } returns expectedResult
+        coEvery {
+            userPreferencesRepository.addAlertStationWithLocation(stationName, latitude, longitude)
+        } returns expectedResult
 
         // When
-        val result = addAlertStationUseCase(stationName)
+        val result = addAlertStationUseCase(stationName, latitude, longitude)
 
         // Then
         assertEquals(expectedResult.isFailure, result.isFailure)
-        coVerify(exactly = 1) { userPreferencesRepository.addAlertStation(stationName) }
+        coVerify(exactly = 1) {
+            userPreferencesRepository.addAlertStationWithLocation(stationName, latitude, longitude)
+        }
     }
 }

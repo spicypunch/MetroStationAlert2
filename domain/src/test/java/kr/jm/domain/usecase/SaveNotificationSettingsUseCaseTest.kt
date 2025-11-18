@@ -5,16 +5,17 @@ import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import kr.jm.domain.repository.UserPreferencesRepository
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.Assertions.*
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
+import org.junit.Before
+import org.junit.Test
 
 class SaveNotificationSettingsUseCaseTest {
 
     private lateinit var userPreferencesRepository: UserPreferencesRepository
     private lateinit var saveNotificationSettingsUseCase: SaveNotificationSettingsUseCase
 
-    @BeforeEach
+    @Before
     fun setUp() {
         userPreferencesRepository = mockk()
         saveNotificationSettingsUseCase = SaveNotificationSettingsUseCase(userPreferencesRepository)

@@ -7,16 +7,16 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import kr.jm.domain.model.LocationData
 import kr.jm.domain.repository.LocationRepository
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.Assertions.*
+import kotlin.test.assertEquals
+import org.junit.Before
+import org.junit.Test
 
 class GetAlertStationLocationUseCaseTest {
 
     private lateinit var locationRepository: LocationRepository
     private lateinit var getAlertStationLocationUseCase: GetAlertStationLocationUseCase
 
-    @BeforeEach
+    @Before
     fun setUp() {
         locationRepository = mockk()
         getAlertStationLocationUseCase = GetAlertStationLocationUseCase(locationRepository)

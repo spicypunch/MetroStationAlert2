@@ -6,16 +6,16 @@ import io.mockk.verify
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import kr.jm.domain.repository.LocationRepository
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.Assertions.*
+import kotlin.test.assertEquals
+import org.junit.Before
+import org.junit.Test
 
 class GetAlertStateUseCaseTest {
 
     private lateinit var locationRepository: LocationRepository
     private lateinit var getAlertStateUseCase: GetAlertStateUseCase
 
-    @BeforeEach
+    @Before
     fun setUp() {
         locationRepository = mockk()
         getAlertStateUseCase = GetAlertStateUseCase(locationRepository)
@@ -57,7 +57,7 @@ class GetAlertStateUseCaseTest {
     fun `invoke returns multiple state changes`() = runTest {
         // Given
         val stateChanges = listOf(true, false, true)
-        every { locationRepository.getAlertState() } returns flowOf(*stateChanges.toBooleanArray())
+        every { locationRepository.getAlertState() } returns flowOf(*stateChanges.toTypedArray())
 
         // When
         val result = getAlertStateUseCase()

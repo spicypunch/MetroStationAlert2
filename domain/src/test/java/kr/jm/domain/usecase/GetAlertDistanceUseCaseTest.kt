@@ -6,16 +6,16 @@ import io.mockk.verify
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import kr.jm.domain.repository.UserPreferencesRepository
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.Assertions.*
+import kotlin.test.assertEquals
+import org.junit.Before
+import org.junit.Test
 
 class GetAlertDistanceUseCaseTest {
 
     private lateinit var userPreferencesRepository: UserPreferencesRepository
     private lateinit var getAlertDistanceUseCase: GetAlertDistanceUseCase
 
-    @BeforeEach
+    @Before
     fun setUp() {
         userPreferencesRepository = mockk()
         getAlertDistanceUseCase = GetAlertDistanceUseCase(userPreferencesRepository)
@@ -57,7 +57,7 @@ class GetAlertDistanceUseCaseTest {
     fun `invoke returns updated distances`() = runTest {
         // Given
         val distances = listOf(1.0f, 2.0f, 3.0f)
-        every { userPreferencesRepository.getDistance() } returns flowOf(*distances.toFloatArray())
+        every { userPreferencesRepository.getDistance() } returns flowOf(*distances.toTypedArray())
 
         // When
         val result = getAlertDistanceUseCase()

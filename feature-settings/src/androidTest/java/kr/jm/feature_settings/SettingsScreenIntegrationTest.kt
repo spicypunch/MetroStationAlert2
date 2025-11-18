@@ -2,7 +2,9 @@ package kr.jm.feature_settings
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.hasSetTextAction
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onAllNodes
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -12,6 +14,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kr.jm.domain.usecase.GetAlertDistanceUseCase
 import kr.jm.domain.usecase.GetNotificationContentUseCase
@@ -64,70 +67,31 @@ class SettingsScreenIntegrationTest {
     @Test
     fun settingsScreen_알림_제목_입력_및_저장_테스트() {
         // Given
-        val mockGetNotificationTitleUseCase = mockk<GetNotificationTitleUseCase>()
-        val mockGetNotificationContentUseCase = mockk<GetNotificationContentUseCase>()
-        val mockGetAlertDistanceUseCase = mockk<GetAlertDistanceUseCase>()
-        val mockSaveNotificationSettingsUseCase = mockk<SaveNotificationSettingsUseCase>()
-        val mockSaveAlertDistanceUseCase = mockk<SaveAlertDistanceUseCase>()
-
-        every { mockGetNotificationTitleUseCase() } returns MutableStateFlow("")
-        every { mockGetNotificationContentUseCase() } returns MutableStateFlow("")
-        every { mockGetAlertDistanceUseCase() } returns MutableStateFlow(1.0f)
-        coEvery { mockSaveNotificationSettingsUseCase(any(), any()) } returns Result.success("저장 완료")
-
-        val mockViewModel = SettingsViewModel(
-            mockGetNotificationTitleUseCase,
-            mockGetNotificationContentUseCase,
-            mockGetAlertDistanceUseCase,
-            mockSaveNotificationSettingsUseCase,
-            mockSaveAlertDistanceUseCase
-        )
+        val mockViewModel = mockk<SettingsViewModel>(relaxed = true)
+        every { mockViewModel.uiState } returns MutableStateFlow(SettingsScreenState(notificationTitle = ""))
 
         // When
         composeTestRule.setContent {
             SettingsScreen(settingsViewModel = mockViewModel)
         }
 
-        // 제목 입력 필드 찾기 및 텍스트 입력
         composeTestRule.waitForIdle()
 
-        // 첫 번째 TextField (알림 제목)에 텍스트 입력
-        val titleTextFields = composeTestRule.onAllNodes(hasText("").and(hasContentDescription("").not()))
-        if (titleTextFields.fetchSemanticsNodes().isNotEmpty()) {
-            titleTextFields[0].performTextInput("새로운 제목")
-        }
+        val titleField = composeTestRule.onAllNodes(hasSetTextAction())[0]
+        titleField.performTextInput("새로운 제목")
 
-        // 첫 번째 저장 버튼 클릭
-        val saveButtons = composeTestRule.onAllNodes(hasText("저장"))
-        if (saveButtons.fetchSemanticsNodes().isNotEmpty()) {
-            saveButtons[0].performClick()
-        }
+        composeTestRule.onAllNodes(hasText("저장"))[0].performClick()
 
-        // Then - UI가 여전히 표시되어야 함 (크래시 없음)
-        composeTestRule.onNodeWithText("설정⚙️").assertIsDisplayed()
+        // Then
+        verify { mockViewModel.onNotificationTitleChanged("새로운 제목") }
+        verify { mockViewModel.saveNotificationTitle() }
     }
 
     @Test
     fun settingsScreen_알림_내용_입력_및_저장_테스트() {
         // Given
-        val mockGetNotificationTitleUseCase = mockk<GetNotificationTitleUseCase>()
-        val mockGetNotificationContentUseCase = mockk<GetNotificationContentUseCase>()
-        val mockGetAlertDistanceUseCase = mockk<GetAlertDistanceUseCase>()
-        val mockSaveNotificationSettingsUseCase = mockk<SaveNotificationSettingsUseCase>()
-        val mockSaveAlertDistanceUseCase = mockk<SaveAlertDistanceUseCase>()
-
-        every { mockGetNotificationTitleUseCase() } returns MutableStateFlow("")
-        every { mockGetNotificationContentUseCase() } returns MutableStateFlow("")
-        every { mockGetAlertDistanceUseCase() } returns MutableStateFlow(1.0f)
-        coEvery { mockSaveNotificationSettingsUseCase(any(), any()) } returns Result.success("저장 완료")
-
-        val mockViewModel = SettingsViewModel(
-            mockGetNotificationTitleUseCase,
-            mockGetNotificationContentUseCase,
-            mockGetAlertDistanceUseCase,
-            mockSaveNotificationSettingsUseCase,
-            mockSaveAlertDistanceUseCase
-        )
+        val mockViewModel = mockk<SettingsViewModel>(relaxed = true)
+        every { mockViewModel.uiState } returns MutableStateFlow(SettingsScreenState(notificationContent = ""))
 
         // When
         composeTestRule.setContent {
@@ -136,41 +100,23 @@ class SettingsScreenIntegrationTest {
 
         composeTestRule.waitForIdle()
 
-        // 두 번째 TextField (알림 내용)에 텍스트 입력
-        val textFields = composeTestRule.onAllNodes(hasText("").and(hasContentDescription("").not()))
-        if (textFields.fetchSemanticsNodes().size >= 2) {
-            textFields[1].performTextInput("새로운 내용")
-        }
+        val contentField = composeTestRule.onAllNodes(hasSetTextAction())[1]
+        contentField.performTextClearance()
+        contentField.performTextInput("새로운 내용")
 
-        // 두 번째 저장 버튼 클릭
-        val saveButtons = composeTestRule.onAllNodes(hasText("저장"))
-        if (saveButtons.fetchSemanticsNodes().size >= 2) {
-            saveButtons[1].performClick()
-        }
+        composeTestRule.onAllNodes(hasText("저장"))[1].performClick()
 
         // Then
-        composeTestRule.onNodeWithText("설정⚙️").assertIsDisplayed()
+        verify { mockViewModel.onNotificationContentChanged("새로운 내용") }
+        verify { mockViewModel.saveNotificationContent() }
     }
 
     @Test
     fun settingsScreen_알림_거리_설정_버튼_클릭_테스트() {
         // Given
-        val mockGetNotificationTitleUseCase = mockk<GetNotificationTitleUseCase>()
-        val mockGetNotificationContentUseCase = mockk<GetNotificationContentUseCase>()
-        val mockGetAlertDistanceUseCase = mockk<GetAlertDistanceUseCase>()
-        val mockSaveNotificationSettingsUseCase = mockk<SaveNotificationSettingsUseCase>()
-        val mockSaveAlertDistanceUseCase = mockk<SaveAlertDistanceUseCase>()
-
-        every { mockGetNotificationTitleUseCase() } returns MutableStateFlow("")
-        every { mockGetNotificationContentUseCase() } returns MutableStateFlow("")
-        every { mockGetAlertDistanceUseCase() } returns MutableStateFlow(2.5f)
-
-        val mockViewModel = SettingsViewModel(
-            mockGetNotificationTitleUseCase,
-            mockGetNotificationContentUseCase,
-            mockGetAlertDistanceUseCase,
-            mockSaveNotificationSettingsUseCase,
-            mockSaveAlertDistanceUseCase
+        val mockViewModel = mockk<SettingsViewModel>(relaxed = true)
+        every { mockViewModel.uiState } returns MutableStateFlow(
+            SettingsScreenState(alertDistance = 2.5f, showBottomSheet = false)
         )
 
         // When
@@ -180,35 +126,18 @@ class SettingsScreenIntegrationTest {
 
         composeTestRule.waitForIdle()
 
-        // 거리 설정 버튼 클릭
         composeTestRule.onNodeWithText("2.5km").performClick()
 
-        composeTestRule.waitForIdle()
-
-        // Then - 바텀시트가 열렸는지 확인
-        composeTestRule.onNodeWithText("확인").assertIsDisplayed()
+        // Then
+        verify { mockViewModel.onShowBottomSheet() }
     }
 
     @Test
     fun settingsScreen_바텀시트에서_거리_저장_테스트() {
         // Given
-        val mockGetNotificationTitleUseCase = mockk<GetNotificationTitleUseCase>()
-        val mockGetNotificationContentUseCase = mockk<GetNotificationContentUseCase>()
-        val mockGetAlertDistanceUseCase = mockk<GetAlertDistanceUseCase>()
-        val mockSaveNotificationSettingsUseCase = mockk<SaveNotificationSettingsUseCase>()
-        val mockSaveAlertDistanceUseCase = mockk<SaveAlertDistanceUseCase>()
-
-        every { mockGetNotificationTitleUseCase() } returns MutableStateFlow("")
-        every { mockGetNotificationContentUseCase() } returns MutableStateFlow("")
-        every { mockGetAlertDistanceUseCase() } returns MutableStateFlow(3.0f)
-        coEvery { mockSaveAlertDistanceUseCase(any()) } returns Result.success("저장 완료")
-
-        val mockViewModel = SettingsViewModel(
-            mockGetNotificationTitleUseCase,
-            mockGetNotificationContentUseCase,
-            mockGetAlertDistanceUseCase,
-            mockSaveNotificationSettingsUseCase,
-            mockSaveAlertDistanceUseCase
+        val mockViewModel = mockk<SettingsViewModel>(relaxed = true)
+        every { mockViewModel.uiState } returns MutableStateFlow(
+            SettingsScreenState(alertDistance = 3.0f, showBottomSheet = true)
         )
 
         // When
@@ -218,16 +147,10 @@ class SettingsScreenIntegrationTest {
 
         composeTestRule.waitForIdle()
 
-        // 거리 설정 버튼 클릭하여 바텀시트 열기
-        composeTestRule.onNodeWithText("3.0km").performClick()
-        composeTestRule.waitForIdle()
-
-        // 확인 버튼 클릭
         composeTestRule.onNodeWithText("확인").performClick()
-        composeTestRule.waitForIdle()
 
-        // Then - 기본 UI가 여전히 표시되어야 함
-        composeTestRule.onNodeWithText("설정⚙️").assertIsDisplayed()
+        // Then
+        verify { mockViewModel.saveAlertDistance() }
     }
 
     @Test
