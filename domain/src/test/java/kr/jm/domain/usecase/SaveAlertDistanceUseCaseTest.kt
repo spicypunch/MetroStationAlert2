@@ -5,16 +5,17 @@ import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import kr.jm.domain.repository.UserPreferencesRepository
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.Assertions.*
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
+import org.junit.Before
+import org.junit.Test
 
 class SaveAlertDistanceUseCaseTest {
 
     private lateinit var userPreferencesRepository: UserPreferencesRepository
     private lateinit var saveAlertDistanceUseCase: SaveAlertDistanceUseCase
 
-    @BeforeEach
+    @Before
     fun setUp() {
         userPreferencesRepository = mockk()
         saveAlertDistanceUseCase = SaveAlertDistanceUseCase(userPreferencesRepository)

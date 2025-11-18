@@ -2,7 +2,7 @@ package kr.jm.data.datasource
 
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
-import androidx.test.ext.junit.runners.AndroidJUnit4
+import org.robolectric.RobolectricTestRunner
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -10,7 +10,7 @@ import org.robolectric.annotation.Config
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
-@RunWith(AndroidJUnit4::class)
+@RunWith(RobolectricTestRunner::class)
 @Config(sdk = [34], manifest = Config.NONE)
 class LocalSubwayStationDataSourceTest {
 

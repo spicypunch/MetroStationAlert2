@@ -6,16 +6,16 @@ import io.mockk.verify
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import kr.jm.domain.repository.UserPreferencesRepository
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.Assertions.*
+import kotlin.test.assertEquals
+import org.junit.Before
+import org.junit.Test
 
 class GetNotificationTitleUseCaseTest {
 
     private lateinit var userPreferencesRepository: UserPreferencesRepository
     private lateinit var getNotificationTitleUseCase: GetNotificationTitleUseCase
 
-    @BeforeEach
+    @Before
     fun setUp() {
         userPreferencesRepository = mockk()
         getNotificationTitleUseCase = GetNotificationTitleUseCase(userPreferencesRepository)

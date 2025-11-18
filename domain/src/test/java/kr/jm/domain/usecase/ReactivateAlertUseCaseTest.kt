@@ -5,15 +5,16 @@ import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import kr.jm.domain.repository.LocationRepository
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
+import kotlin.test.assertEquals
+import org.junit.Before
+import org.junit.Test
 
 class ReactivateAlertUseCaseTest {
 
     private lateinit var locationRepository: LocationRepository
     private lateinit var reactivateAlertUseCase: ReactivateAlertUseCase
 
-    @BeforeEach
+    @Before
     fun setUp() {
         locationRepository = mockk()
         reactivateAlertUseCase = ReactivateAlertUseCase(locationRepository)
@@ -41,7 +42,7 @@ class ReactivateAlertUseCaseTest {
         try {
             reactivateAlertUseCase()
         } catch (e: Exception) {
-            assert(e.message == "Test exception")
+            assertEquals("Test exception", e.message)
         }
         coVerify { locationRepository.reactivateAlert() }
     }

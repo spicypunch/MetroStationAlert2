@@ -32,6 +32,8 @@ class SearchViewModelTest {
     private lateinit var removeBookmarkUseCase: RemoveBookmarkUseCase
     private lateinit var addAlertStationUseCase: AddAlertStationUseCase
     private lateinit var getAddedAlertStationUseCase: GetAddedAlertStationUseCase
+    private lateinit var getAlertStateUseCase: GetAlertStateUseCase
+    private lateinit var reactivateAlertUseCase: ReactivateAlertUseCase
 
     private lateinit var viewModel: SearchViewModel
     private lateinit var fakeStations: List<SubwayStation>
@@ -50,12 +52,15 @@ class SearchViewModelTest {
         removeBookmarkUseCase = mockk()
         addAlertStationUseCase = mockk()
         getAddedAlertStationUseCase = mockk()
+        getAlertStateUseCase = mockk()
+        reactivateAlertUseCase = mockk(relaxed = true)
 
         every { getSubwayStationsUseCase() } returns flowOf(fakeStations)
         every { getAddedAlertStationUseCase() } returns flowOf("잠실역")
+        every { getAlertStateUseCase() } returns flowOf(true)
         
         // searchSubwayStationsUseCase에 대한 기본 동작 정의 추가
-        coEvery { searchSubwayStationsUseCase.invoke(any(), any()) } returns emptyList()
+        coEvery { searchSubwayStationsUseCase(any(), any()) } returns emptyList()
 
 
         viewModel = SearchViewModel(
@@ -64,7 +69,9 @@ class SearchViewModelTest {
             addBookmarkUseCase,
             removeBookmarkUseCase,
             addAlertStationUseCase,
-            getAddedAlertStationUseCase
+            getAddedAlertStationUseCase,
+            getAlertStateUseCase,
+            reactivateAlertUseCase
         )
     }
 
@@ -85,13 +92,13 @@ class SearchViewModelTest {
     fun `addBookmark 호출 시 addBookmarkUseCase가 호출되어야 한다`() = runTest {
         // Given
         val stationName = "강남역"
-        coEvery { addBookmarkUseCase.invoke(stationName) } returns Result.success(stationName)
+        coEvery { addBookmarkUseCase(stationName) } returns Result.success(stationName)
 
         // When
         viewModel.addBookmark(stationName)
 
         // Then
-        coVerify(exactly = 1) { addBookmarkUseCase.invoke(stationName) }
+        coVerify(exactly = 1) { addBookmarkUseCase(stationName) }
     }
 
     @Test
@@ -100,7 +107,7 @@ class SearchViewModelTest {
         val query = "야탑"
         val searchResult = listOf(SubwayStation("3", "야탑역", "분당선", 0.0, 0.0))
         val initialStations = viewModel.uiState.value.allStations
-        coEvery { searchSubwayStationsUseCase.invoke(query, initialStations) } returns searchResult
+        coEvery { searchSubwayStationsUseCase(query, initialStations) } returns searchResult
 
         // When
         viewModel.onSearchQueryChanged(query)
@@ -122,7 +129,7 @@ class SearchViewModelTest {
         val query = "테스트"
         val errorMessage = "Search failed"
         val exception = Exception(errorMessage)
-        coEvery { searchSubwayStationsUseCase.invoke(any(), any()) } throws exception
+        coEvery { searchSubwayStationsUseCase(any(), any()) } throws exception
 
         // When
         viewModel.onSearchQueryChanged(query)
@@ -199,26 +206,39 @@ class SearchViewModelTest {
     fun `addAlertStation 호출 시 addAlertStationUseCase가 호출되어야 한다`() = runTest {
         // Given
         val stationName = "강남역"
-        coEvery { addAlertStationUseCase.invoke(stationName) } returns Result.success(stationName)
+        val station = fakeStations.first { it.stationName == stationName }
+        coEvery {
+            addAlertStationUseCase(
+                station.stationName,
+                station.latitude,
+                station.longitude
+            )
+        } returns Result.success(stationName)
 
         // When
         viewModel.addAlertStation(stationName)
 
         // Then
-        coVerify(exactly = 1) { addAlertStationUseCase.invoke(stationName) }
+        coVerify(exactly = 1) {
+            addAlertStationUseCase(
+                station.stationName,
+                station.latitude,
+                station.longitude
+            )
+        }
     }
 
     @Test
     fun `removeBookmark 호출 시 removeBookmarkUseCase가 호출되어야 한다`() = runTest {
         // Given
         val stationName = "강남역"
-        coEvery { removeBookmarkUseCase.invoke(stationName) } returns Result.success(stationName)
+        coEvery { removeBookmarkUseCase(stationName) } returns Result.success(stationName)
 
         // When
         viewModel.removeBookmark(stationName)
 
         // Then
-        coVerify(exactly = 1) { removeBookmarkUseCase.invoke(stationName) }
+        coVerify(exactly = 1) { removeBookmarkUseCase(stationName) }
     }
 
     @Test
@@ -251,6 +271,7 @@ class SearchViewModelTest {
         assertEquals("전체", state.selectedLineName)
         assertFalse(state.dropDownExpanded)
         assertEquals("잠실역", state.addedAlertStation) // getAddedAlertStationUseCase에서 설정된 값
+        assertTrue(state.isAlertActive)
     }
 
     @Test
@@ -269,7 +290,9 @@ class SearchViewModelTest {
             addBookmarkUseCase,
             removeBookmarkUseCase,
             addAlertStationUseCase,
-            getAddedAlertStationUseCase
+            getAddedAlertStationUseCase,
+            getAlertStateUseCase,
+            reactivateAlertUseCase
         )
 
         mainDispatcherRule.testDispatcher.scheduler.advanceUntilIdle()
@@ -308,15 +331,24 @@ class SearchViewModelTest {
         // Given
         val stationName = "강남역"
         val errorMessage = "북마크 추가 실패"
-        coEvery { addBookmarkUseCase.invoke(stationName) } returns Result.failure(Exception(errorMessage))
+        coEvery { addBookmarkUseCase(stationName) } returns Result.failure(Exception(errorMessage))
 
         // When
         viewModel.addBookmark(stationName)
 
         // Then
-        coVerify(exactly = 1) { addBookmarkUseCase.invoke(stationName) }
+        coVerify(exactly = 1) { addBookmarkUseCase(stationName) }
         // 실제 ViewModel에서 에러 처리가 구현되어 있지 않으므로 
         // 향후 에러 처리 로직 추가 시 테스트 확장 가능
+    }
+
+    @Test
+    fun `reactivateAlert 호출 시 usecase가 실행되어야 한다`() = runTest {
+        // When
+        viewModel.reactivateAlert()
+
+        // Then
+        coVerify(exactly = 1) { reactivateAlertUseCase() }
     }
 
     @Test
@@ -327,8 +359,8 @@ class SearchViewModelTest {
         val result1 = listOf(SubwayStation("1", "강남역", "2호선", 0.0, 0.0))
         val result2 = listOf(SubwayStation("2", "역삼역", "2호선", 0.0, 0.0))
         
-        coEvery { searchSubwayStationsUseCase.invoke(query1, any()) } returns result1
-        coEvery { searchSubwayStationsUseCase.invoke(query2, any()) } returns result2
+        coEvery { searchSubwayStationsUseCase(query1, any()) } returns result1
+        coEvery { searchSubwayStationsUseCase(query2, any()) } returns result2
 
         // When
         viewModel.onSearchQueryChanged(query1)
