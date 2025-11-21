@@ -8,7 +8,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kr.jm.domain.model.BookmarkKey
 import kr.jm.domain.model.SubwayArrivalResponse
+import kr.jm.domain.mapper.SubwayLineMapper
 import kr.jm.domain.usecase.GetBookmarkUseCase
 import kr.jm.domain.usecase.GetSubwayArrivalTimeUseCase
 import javax.inject.Inject
@@ -49,19 +51,42 @@ class BookmarkViewModel @Inject constructor(
 
     private fun getSubwayArrivalTime(stations: Set<String>) {
         viewModelScope.launch {
-            val arrivalTimeMap: Map<String, SubwayArrivalResponse> = stations
-                .map { stationName ->
+            // 1. 북마크 키 파싱
+            val bookmarkKeys = stations.map { BookmarkKey.parse(it) }
+            
+            // 2. stationName으로 그룹화하여 중복 API 호출 방지
+            val groupedByStation = bookmarkKeys.groupBy { it.stationName }
+            
+            val arrivalTimeMap: Map<String, SubwayArrivalResponse> = groupedByStation
+                .map { (stationName, keys) ->
                     async {
                         try {
-                            stationName to getSubwayArrivalTimeUseCase(stationName)
+                            // 3. API 호출 (stationName으로)
+                            val response = getSubwayArrivalTimeUseCase(stationName)
+                            
+                            // 4. 각 북마크 키에 대해 필터링된 응답 생성
+                            keys.mapNotNull { key ->
+                                val subwayId = SubwayLineMapper.getSubwayId(key.lineName)
+                                val filteredResponse = if (subwayId != null) {
+                                    // 특정 노선만 필터링
+                                    response.copy(
+                                        realtimeArrivalList = response.realtimeArrivalList.filter { 
+                                            it.subwayId == subwayId 
+                                        }
+                                    )
+                                } else {
+                                    // 전체 노선 또는 알 수 없는 노선
+                                    response
+                                }
+                                key.toKey() to filteredResponse
+                            }
                         } catch (e: Exception) {
-                            // 에러 발생 시 해당 역은 제외
-                            null
+                            emptyList()
                         }
                     }
                 }
                 .awaitAll()
-                .mapNotNull { it }
+                .flatten()
                 .toMap()
 
             _uiState.value = _uiState.value.copy(
