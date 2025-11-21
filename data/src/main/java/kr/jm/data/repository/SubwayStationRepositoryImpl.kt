@@ -25,7 +25,7 @@ class SubwayStationRepositoryImpl @Inject constructor(
                     lineName = dto.lineName,
                     latitude = dto.latitude,
                     longitude = dto.longitude,
-                    isBookmark = bookmarkedStations.contains(dto.stationName)
+                    isBookmark = bookmarkedStations.contains("${dto.stationName}_${dto.lineName}")
                 )
             }
         }

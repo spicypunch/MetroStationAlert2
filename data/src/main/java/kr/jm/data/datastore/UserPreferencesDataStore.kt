@@ -33,27 +33,27 @@ class UserPreferencesDataStore @Inject constructor(
         val NOTI_CONTENT = stringPreferencesKey("noti_content")
     }
 
-    suspend fun addBookmark(stationName: String): Result<String> {
+    suspend fun addBookmark(stationKey: String): Result<String> {
         return try {
             context.dataStore.edit { preferences ->
                 val currentBookmarks =
                     preferences[PreferencesKeys.BOOKMARKED_STATIONS] ?: emptySet()
-                preferences[PreferencesKeys.BOOKMARKED_STATIONS] = currentBookmarks + stationName
+                preferences[PreferencesKeys.BOOKMARKED_STATIONS] = currentBookmarks + stationKey
             }
-            Result.success(stationName)
+            Result.success(stationKey)
         } catch (e: Exception) {
             Result.failure(e)
         }
     }
 
-    suspend fun removeBookmark(stationName: String): Result<String> {
+    suspend fun removeBookmark(stationKey: String): Result<String> {
         return try {
             context.dataStore.edit { preferences ->
                 val currentBookmarks =
                     preferences[PreferencesKeys.BOOKMARKED_STATIONS] ?: emptySet()
-                preferences[PreferencesKeys.BOOKMARKED_STATIONS] = currentBookmarks - stationName
+                preferences[PreferencesKeys.BOOKMARKED_STATIONS] = currentBookmarks - stationKey
             }
-            Result.success(stationName)
+            Result.success(stationKey)
         } catch (e: Exception) {
             Result.failure(e)
         }

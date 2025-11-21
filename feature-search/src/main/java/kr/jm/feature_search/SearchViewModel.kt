@@ -128,10 +128,17 @@ class SearchViewModel @Inject constructor(
             _uiState.value = _uiState.value.copy(isLoading = true)
 
             try {
+                val currentLine = _uiState.value.selectedLineName.ifBlank { "전체" }
+                val stationsForSearch = if (currentLine == "전체") {
+                    _uiState.value.allStations
+                } else {
+                    _uiState.value.allStations.filter { it.lineName == currentLine }
+                }
+                
                 val searchStationResult =
                     searchSubwayStationsUseCase(
                         _uiState.value.searchQuery,
-                        _uiState.value.filteredStations
+                        stationsForSearch
                     )
                 _uiState.value = _uiState.value.copy(
                     filteredStations = searchStationResult,
@@ -187,15 +194,17 @@ class SearchViewModel @Inject constructor(
         )
     }
 
-    fun addBookmark(stationName: String) {
+    fun addBookmark(station: SubwayStation) {
         viewModelScope.launch {
-            addBookmarkUseCase(stationName)
+            val stationKey = "${station.stationName}_${station.lineName}"
+            addBookmarkUseCase(stationKey)
         }
     }
 
-    fun removeBookmark(stationName: String) {
+    fun removeBookmark(station: SubwayStation) {
         viewModelScope.launch {
-            removeBookmarkUseCase(stationName)
+            val stationKey = "${station.stationName}_${station.lineName}"
+            removeBookmarkUseCase(stationKey)
         }
     }
 

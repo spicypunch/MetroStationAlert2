@@ -101,14 +101,14 @@ fun SearchScreen(
                 val station = searchScreenState.filteredStations[index]
                 StationItem(
                     station = station,
-                    onClickNotificationIcon = { stationName ->
-                        searchViewModel.addAlertStation(stationName)
+                    onClickNotificationIcon = { station ->
+                        searchViewModel.addAlertStation(station.stationName)
                     },
-                    onClickBookmarkIcon = { stationName ->
+                    onClickBookmarkIcon = { station ->
                         if (station.isBookmark) {
-                            searchViewModel.removeBookmark(stationName)
+                            searchViewModel.removeBookmark(station)
                         } else {
-                            searchViewModel.addBookmark(stationName)
+                            searchViewModel.addBookmark(station)
                         }
                     }
                 )
@@ -242,16 +242,16 @@ private fun DropdownMenuSection(
 @Composable
 private fun StationItem(
     station: SubwayStation,
-    onClickNotificationIcon: (String) -> Unit,
-    onClickBookmarkIcon: (String) -> Unit
+    onClickNotificationIcon: (SubwayStation) -> Unit,
+    onClickBookmarkIcon: (SubwayStation) -> Unit
 ) {
     CommonStationCard(
         primaryText = station.stationName,
         secondText = station.lineName,
         isBookmark = station.isBookmark,
         bookMarkIconVisible = true,
-        onClickNotificationIcon = onClickNotificationIcon,
-        onClickBookmarkIcon = onClickBookmarkIcon
+        onClickNotificationIcon = { onClickNotificationIcon(station) },
+        onClickBookmarkIcon = { onClickBookmarkIcon(station) }
     )
 }
 
