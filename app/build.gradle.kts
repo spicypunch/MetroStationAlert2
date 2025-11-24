@@ -8,11 +8,11 @@ plugins {
 }
 
 android {
-    namespace = "com.jm.metrostationalert"
+    namespace = "com.jm.metrostationalert2"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.jm.metrostationalert"
+        applicationId = "com.jm.metrostationalert2"
         minSdk = 24
         targetSdk = 36
         versionCode = 1

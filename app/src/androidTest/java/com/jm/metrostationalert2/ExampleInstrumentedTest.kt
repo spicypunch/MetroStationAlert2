@@ -1,4 +1,4 @@
-package com.jm.metrostationalert
+package com.jm.metrostationalert2
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -19,6 +19,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("com.jm.metrostationalert", appContext.packageName)
+        assertEquals("com.jm.metrostationalert2", appContext.packageName)
     }
 }

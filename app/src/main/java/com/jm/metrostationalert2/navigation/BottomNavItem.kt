@@ -1,4 +1,4 @@
-package com.jm.metrostationalert.navigation
+package com.jm.metrostationalert2.navigation
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
