@@ -1,4 +1,4 @@
-package com.jm.metrostationalert
+package com.jm.metrostationalert2
 
 import org.junit.Test
 

@@ -1,4 +1,4 @@
-package com.jm.metrostationalert.di
+package com.jm.metrostationalert2.di
 
 import dagger.Module
 import dagger.Provides

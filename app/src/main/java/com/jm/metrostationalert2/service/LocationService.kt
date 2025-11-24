@@ -1,4 +1,4 @@
-package com.jm.metrostationalert.service
+package com.jm.metrostationalert2.service
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -16,8 +16,8 @@ import android.os.IBinder
 import android.util.Log
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.*
-import com.jm.metrostationalert.MainActivity
-import com.jm.metrostationalert.R
+import com.jm.metrostationalert2.MainActivity
+import com.jm.metrostationalert2.R
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

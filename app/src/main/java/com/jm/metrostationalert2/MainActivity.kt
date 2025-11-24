@@ -1,4 +1,4 @@
-package com.jm.metrostationalert
+package com.jm.metrostationalert2
 
 import android.Manifest
 import android.content.Context
@@ -29,8 +29,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.normal.TedPermission
-import com.jm.metrostationalert.navigation.BottomNavItem
-import com.jm.metrostationalert.service.LocationService
+import com.jm.metrostationalert2.navigation.BottomNavItem
+import com.jm.metrostationalert2.service.LocationService
 import dagger.hilt.android.AndroidEntryPoint
 import kr.jm.common_ui.theme.bgColor
 import kr.jm.feature_bookmark.bookmarkScreen
