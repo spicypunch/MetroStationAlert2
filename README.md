@@ -1,4 +1,5 @@
 # 🚇 Metro Station Alert
+[다운로드](https://play.google.com/store/apps/details?id=com.jm.metrostationalert2)
 
 > 지하철 하차 알림 앱 - 목적지 역 근처에 도착하면 자동으로 알림을 받아보세요!
 
