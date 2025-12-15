@@ -45,6 +45,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kr.jm.common_ui.component.CommonStationCard
+import kr.jm.common_ui.component.NativeAdCard
 import kr.jm.domain.model.SubwayStation
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -112,6 +113,11 @@ fun SearchScreen(
                         }
                     }
                 )
+
+                // 4개마다 네이티브 광고 삽입
+                if ((index + 1) % 4 == 0 && index < searchScreenState.filteredStations.lastIndex) {
+                    NativeAdCard(adUnitId = searchScreenState.nativeAdUnitId)
+                }
             }
         }
     }

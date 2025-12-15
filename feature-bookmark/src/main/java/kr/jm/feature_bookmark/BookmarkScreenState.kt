@@ -6,7 +6,8 @@ data class BookmarkScreenState(
     val bookmarks: Set<String> = emptySet(),
     val arrivalTimeMap: Map<String,SubwayArrivalResponse> = emptyMap(),
     val isLoading: Boolean = false,
-    val error: String? = null
+    val error: String? = null,
+    val bannerAdUnitId: String = ""
 )
 
 data class DirectionArrivalInfo(

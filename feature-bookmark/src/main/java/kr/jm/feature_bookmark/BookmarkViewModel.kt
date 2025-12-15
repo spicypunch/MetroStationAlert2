@@ -14,14 +14,16 @@ import kr.jm.domain.mapper.SubwayLineMapper
 import kr.jm.domain.usecase.GetBookmarkUseCase
 import kr.jm.domain.usecase.GetSubwayArrivalTimeUseCase
 import javax.inject.Inject
+import javax.inject.Named
 
 @HiltViewModel
 class BookmarkViewModel @Inject constructor(
+    @Named("bannerAdUnitId") private val bannerAdUnitId: String,
     private val getBookmarkUseCase: GetBookmarkUseCase,
     private val getSubwayArrivalTimeUseCase: GetSubwayArrivalTimeUseCase
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(BookmarkScreenState())
+    private val _uiState = MutableStateFlow(BookmarkScreenState(bannerAdUnitId = bannerAdUnitId))
     val uiState: StateFlow<BookmarkScreenState> = _uiState.asStateFlow()
 
     init {

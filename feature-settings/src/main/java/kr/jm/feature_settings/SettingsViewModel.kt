@@ -14,9 +14,11 @@ import kr.jm.domain.usecase.GetNotificationTitleUseCase
 import kr.jm.domain.usecase.SaveAlertDistanceUseCase
 import kr.jm.domain.usecase.SaveNotificationSettingsUseCase
 import javax.inject.Inject
+import javax.inject.Named
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
+    @Named("bannerAdUnitId") private val bannerAdUnitId: String,
     private val getNotificationTitleUseCase: GetNotificationTitleUseCase,
     private val getNotificationContentUseCase: GetNotificationContentUseCase,
     private val getAlertDistanceUseCase: GetAlertDistanceUseCase,
@@ -24,7 +26,7 @@ class SettingsViewModel @Inject constructor(
     private val saveAlertDistanceUseCase: SaveAlertDistanceUseCase
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(SettingsScreenState())
+    private val _uiState = MutableStateFlow(SettingsScreenState(bannerAdUnitId = bannerAdUnitId))
     val uiState: StateFlow<SettingsScreenState> = _uiState.asStateFlow()
 
     init {

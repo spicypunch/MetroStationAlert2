@@ -7,6 +7,7 @@ data class SearchScreenState(
     val addedAlertStation: String = "",
     val filteredStations: List<SubwayStation> = emptyList(),
     val selectedLineName: String = "전체",
+    val nativeAdUnitId: String = "",
     val subwayLineList: List<String> = listOf(
         "전체",
         "1호선",

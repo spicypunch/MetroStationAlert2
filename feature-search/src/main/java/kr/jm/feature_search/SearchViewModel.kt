@@ -22,9 +22,11 @@ import kr.jm.domain.usecase.ReactivateAlertUseCase
 import kr.jm.domain.usecase.RemoveBookmarkUseCase
 import kr.jm.domain.usecase.SearchSubwayStationsUseCase
 import javax.inject.Inject
+import javax.inject.Named
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
+    @Named("nativeAdUnitId") private val nativeAdUnitId: String,
     private val getSubwayStationsUseCase: GetSubwayStationsUseCase,
     private val searchSubwayStationsUseCase: SearchSubwayStationsUseCase,
     private val addBookmarkUseCase: AddBookmarkUseCase,
@@ -35,7 +37,7 @@ class SearchViewModel @Inject constructor(
     private val reactivateAlertUseCase: ReactivateAlertUseCase,
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(SearchScreenState())
+    private val _uiState = MutableStateFlow(SearchScreenState(nativeAdUnitId = nativeAdUnitId))
     val uiState: StateFlow<SearchScreenState> = _uiState.asStateFlow()
 
     private val stationsState: StateFlow<List<SubwayStation>> =

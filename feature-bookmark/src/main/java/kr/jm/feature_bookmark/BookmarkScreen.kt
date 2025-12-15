@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kr.jm.common_ui.component.BannerAdView
 import kr.jm.common_ui.component.CommonStationCard
 
 @Composable
@@ -41,6 +42,12 @@ fun BookmarkScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
+        // 배너 광고
+        if (bookmarkScreenState.bannerAdUnitId.isNotBlank()) {
+            BannerAdView(adUnitId = bookmarkScreenState.bannerAdUnitId)
+            Spacer(modifier = Modifier.height(8.dp))
+        }
+
         Text(
             "지하철 도착 정보🚊",
             fontSize = 20.sp,

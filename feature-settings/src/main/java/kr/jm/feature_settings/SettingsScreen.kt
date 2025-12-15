@@ -40,6 +40,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kr.jm.common_ui.component.BannerAdView
 
 @SuppressLint("DefaultLocale")
 @Composable
@@ -66,6 +67,12 @@ fun SettingsScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
+        // 배너 광고
+        if (settingsScreenState.bannerAdUnitId.isNotBlank()) {
+            BannerAdView(adUnitId = settingsScreenState.bannerAdUnitId)
+            Spacer(modifier = Modifier.height(8.dp))
+        }
+
         Text(
             text = "설정⚙\uFE0F",
             fontSize = 20.sp,

@@ -19,6 +19,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MetroStationAlert2"
         android:networkSecurityConfig="@xml/network_security_config">
+
+        <!-- AdMob App ID -->
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="${ADMOB_APP_ID}" />
         <activity
             android:name=".MainActivity"
             android:exported="true"

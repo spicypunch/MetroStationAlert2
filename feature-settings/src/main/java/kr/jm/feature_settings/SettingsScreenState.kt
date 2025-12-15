@@ -6,5 +6,6 @@ data class SettingsScreenState(
     val alertDistance: Float = 1.0f,
     val showBottomSheet: Boolean = false,
     val isLoading: Boolean = false,
-    val errorMessage: String? = null
+    val errorMessage: String? = null,
+    val bannerAdUnitId: String = ""
 )
